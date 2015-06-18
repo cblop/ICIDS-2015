@@ -29,7 +29,7 @@
    framerule=0pt
 }
 \usepackage[usenames,dvipsnames]{xcolor}
-\usepackage[disable]{todonotes}
+\usepackage{todonotes}
 \def\mnote#1{\todo[color=Goldenrod,size=\scriptsize]{Matt: #1}}
 \def\jnote#1{\todo[color=CornflowerBlue,size=\scriptsize]{Julian: #1}}
 \def\snote#1{\todo[color=WildStrawberry,size=\scriptsize]{Steve: #1}}
@@ -38,6 +38,8 @@
 
 
 \begin{document}
+
+% Long paper page limit: 12 pages
 
 \title{Describing Possible Narrative Worlds with Kripke Models}
 
@@ -58,22 +60,70 @@ The University of the West of England (UWE), UK\\
 \end{abstract}
 
 \section{Introduction}
-(Describe the problem (regulating agents using narrative events), with previous work (we can include our COIN/CMN papers, Laure-Ryans work from narratology, planners, and other approaches mentioned in previous papers))
+Agent-based approaches to narrative generation must strike a balance between authorial control (writing a story structure), and agent's actions (allowing characters to fill in the details of a story). One way to overcome this is to allow the author to describe the structure of a story in a way which constrains the available actions of the agents.
+
+This introduces a problem: if there are multiple paths through a narrative (chosen by user interaction), how can an author describe alternative scenarios without explicitly writing out every single branch of the story?
+
+\mnote{Current approaches go here}
+
+
+
+\mnote{(Describe the problem (regulating agents using narrative events), with previous work (we can include our COIN/CMN papers, Laure-Ryans work from narratology, planners, and other approaches mentioned in previous papers))}
 
 \section{Propp's Morphology of the Folktale}
-(Describe Propp here, giving Punch and Judy examples as before)
+To express story events in modal logic, we need some sort of formalisation for the analysis of the story~-- rather than an arbitrary selection of features~-- and so we look to narrative theory for inspiration. Instead of describing parts of the Punch and Judy story explicitly (such as `Punch is expected to hit the policeman in this scene'), it is desirable to describe scenes in a more abstract way using roles (`The villain fights the victim in this scene'). The use of more general story fragments allows us to reuse them in multiple scenes, or even in other stories.
+
+Narratology, and structuralism in particular, supply such generalised building blocks for stories. Russian formalism is an early movement in narrative theory that sought to formalise the elements of narrative, and Vladimir Propp was a prominent figure in this school.  One outcome of this movement was Propp's 1928 formalism derived from the study of Russian folktales, \emph{The Morphology of the Folktale} \cite{propp1968morphology}, which is what we use to build a model to direct the course of the narrative.  In this formalism, Propp identifies recurring characters, which become roles, and motifs, which become action fragments, in Russian folklore, distilling them down to a concise syntax with which to describe stories. Propp's functional, event-driven style translates comfortably to an institution comprised of event-based norms. However, while these action fragments fit the Punch and Judy story adequately, we note that the role labels can sound rather awkward because of the apparent semantic import of the textual label.
+
+In Propp's formalism, characters have \emph{roles}, such as \emph{hero}, \emph{villain}, \emph{dispatcher}, \emph{false hero}, and more. Characters performing a certain role are able to perform a subset of \emph{story moves}, which are actions that make the narrative progress. For example, the \emph{dispatcher} might send the \emph{hero} on a quest, or the \emph{victim} may issue an \emph{interdiction} to the \emph{villain}, which is then \emph{violated}.
+
+Propp defines a total of 31 distinct story functions. Each function is given a number and symbol in order to create a succinct way of describing entire stories. Examples of such functions are:
+
+\begin{compactitem}
+  \item One of the members of a family absents himself from home: \emph{absentation}.
+  \item An interdiction is addressed to the hero: \emph{interdiction}.
+  \item The victim submits to deception and thereby unwittingly helps his enemy: \emph{complicity}.
+  \item The villain causes harm or injury to a member of the family: \emph{villainy}.
+\end{compactitem}
+
+Each of these functions can vary in subtle ways. For example, the \emph{villainy} function can be realised as one of 19 distinct forms of villainous deed, including \emph{the villain abducts a person}, \emph{the villain seizes the daylight}, and \emph{the villain makes a threat of cannibalism}.
+These functions are enacted by characters following certain roles. Each role (or \emph{dramatis persona} in Propp's definition) has a \emph{sphere of action} consisting of the functions that they are able to perform at any point in the story. Propp defines seven roles each of which has distinct spheres of action: \emph{villain}, \emph{donor}, \emph{helper}, \emph{princess}, \emph{dispatcher}, \emph{hero}, and \emph{false hero}.
+In a typical story, one story function will follow another as the tale progresses in a sequential series of cause and effect. However, Propp's formalism does also allow for simultaneous story functions.
+
+\subsection{Propp example: sausages and crocodile scene}\label{sec:pjexample}
+To provide some context for Punch and Judy, since it is a peculiarly British phenomenon, although with Italian origins, we quote from Wikipedia:
+\begin{quote}\small
+Punch and Judy is a traditional, popular, and usually very violent puppet show featuring Mr Punch and his wife, Judy. The performance consists of a sequence of short scenes, each depicting an interaction between two characters, most typically Mr Punch and one other character (who usually falls victim to Mr. Punch's club). It is often associated with traditional British seaside culture.
+The Punch and Judy show has roots in the 16th-century Italian commedia dell'arte. \\
+\hfill{\footnotesize
+\url{http://en.wikipedia.org/wiki/Punch_and_Judy}, retrieved 2015-05-06.}
+\end{quote}
+
+The common elements of Punch and Judy are easily described in terms of Propp's story functions. Here we pick one scene to use as an example: the scene where Punch battles a crocodile in order to safeguard some sausages.  In this scene, Joey the clown (our narrator) asks Punch to guard the sausages. Once Joey has left the stage, a crocodile appears and eats the sausages. Punch fights with the crocodile, but it escapes. Joey then returns to find that his sausages are gone.
+The corresponding story functions are:
+\begin{enumerate}
+  \item Joey tells Punch to look after the sausages (\emph{interdiction}).
+  \item Joey has some reservations, but decides to trust Punch (\emph{complicity}).
+  \item Joey gives the sausages to Punch (\emph{provision or receipt of a magical agent}).
+  \item Joey leaves the stage (\emph{absentation}).
+  \item A crocodile enters the stage and eats the sausages (\emph{violation}).
+  \item Punch fights with the crocodile (\emph{struggle}).
+  \item Joey returns to find that the sausages are gone (\emph{return}).
+\end{enumerate}
+
+Some story functions map to Punch and Judy better than others (for example, it is debatable as to whether or not the sausages can be considered a ``magical agent''), but Propp's formalism seems well suited to Punch and Judy for the most part. The advantage of using Propp for the Punch and Judy story domain is that the story function concept maps well to the idea of internal events in institutional models.
 
 \section{A modal logic for Propp}
-(Explain how you can use story functions as modal operators)
+\mnote{(Explain how you can use story functions as modal operators)}
 
 \section{Describing Punch and Judy with Kripke models}
-(Build up an example using the sausages scene from Punch and Judy)
+\mnote{(Build up an example using the sausages scene from Punch and Judy)}
 
 \section{The sausages scene in LoTREC}
-(Describe LoTREC, and how the sausages scene could be described in it)
+\mnote{(Describe LoTREC, and how the sausages scene could be described in it)}
 
 \section{Conclusions and future work}
-(Future work would be to use this system to regulate the actions of agents)
+\mnote{(Future work would be to use this system to regulate the actions of agents)}
 
 \bibliography{icids}
 
