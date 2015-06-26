@@ -41,10 +41,10 @@
 
 % Long paper page limit: 12 pages
 
-\title{Describing Possible Narrative Worlds with Kripke Models}
+\title{Describing Possible Narrative Worlds with Interval Temporal Logic and Kripke Models}
 
 
-\author{Matt Thompson\inst{1,}\inst{2} \and Julian Padget\inst{1} \and Steve Battle\inst{2} }
+\author{Matt Thompson\inst{1,}\inst{2} \and Steve Battle\inst{2} \and Julian Padget\inst{1} }
 \institute{Department of Computer Science,\\
 University of Bath, UK\\
 \email{\{m.r.thompson,j.a.padget\}@bath.ac.uk}
@@ -65,13 +65,21 @@ Agent-based approaches to narrative generation must strike a balance between aut
 
 This introduces a problem: if there are multiple paths through a narrative (chosen by user interaction), how can an author describe alternative scenarios without explicitly writing out every single branch of the story?
 
-\mnote{Current approaches go here}
+A wide variety of approaches have been taken to address this issue. A popular and effective one is to combine the use of a \emph{drama manager} with a Multi Agent System in order to regulate the actions of intelligent agents playing the parts of characters, telling them which actions to take in order to conform to a story. One of the first implementations of this approach was the Oz project at Carnegie Mellon University \cite{bates1992virtual}, ideas from which were later developed to become Mateas and Stern's \emph{Fa{c}cade} \cite{mateas2003faccade}.
 
+Another approach is to model the narrative as an institution of social norms, describing what the character agents are \emph{permitted} and \emph{obliged} to do at certain points in the story \cite{thompson-et-al:2015}. The advantage of this approach is that it merely suggests permitted actions to the agents, which have some degree of control over the actions they finally choose to carry out. For example, in an interactive narrative, a player could push a character so far that it causes them to deviate from the normal course of the story (albeit at some cost to the character agent).
 
+Other approaches to balancing authorial control with player or character agency include the use of director agents \cite{lee2011learning}, reincorporation of player actions back into the narrative \cite{tomaszewski2011use} and mediation to prevent narrative-breaking actions \cite{robertson2013modelling}.
 
-\mnote{(Describe the problem (regulating agents using narrative events), with previous work (we can include our COIN/CMN papers, Laure-Ryans work from narratology, planners, and other approaches mentioned in previous papers))}
+\mnote{Need to include all the work done with planners (Riedl, Young, etc) here}
 
-\section{Propp's Morphology of the Folktale}
+In this paper we describe the use of modal logic, Interval Temporal Logic \cite{della2013interval}, and Kripke models \cite{kripke1963semantical} to describe the many paths which a narrative can take.
+
+This approach is influenced by Marie-Laure Ryan's work describing possible worlds \cite{ryan1991possible} in the field of narratology. Ryan describes how, in the field of interactive narrative, the path one takes through a story is but one realisation of many possible story worlds. She asserts the link between possible worlds and modal logic, and Saul Kripke's work in particular. Taking this as inspiration, we formally develop these ideas in this paper.
+
+We begin with a description of the narrative formalism we use for our approach, Propp's Morphology of the Folktale \cite{propp1968morphology}, in section \ref{sec:propp}. The use of this formalism is demonstrated with an example from the \emph{Punch and Judy} story world in section \ref{sec:pjexample}. Section \ref{sec:propplogic} implements this example using Interval Temporal Logic and modal logic. Following this, Kripke models are then implemented using the LoTREC tableaux prover \cite{del2001lotrec} (section \ref{sec:kripke}).
+
+\section{Propp's Morphology of the Folktale}\label{sec:propp}
 To express story events in modal logic, we need some sort of formalisation for the analysis of the story~-- rather than an arbitrary selection of features~-- and so we look to narrative theory for inspiration. Instead of describing parts of the Punch and Judy story explicitly (such as `Punch is expected to hit the policeman in this scene'), it is desirable to describe scenes in a more abstract way using roles (`The villain fights the victim in this scene'). The use of more general story fragments allows us to reuse them in multiple scenes, or even in other stories.
 
 Narratology, and structuralism in particular, supply such generalised building blocks for stories. Russian formalism is an early movement in narrative theory that sought to formalise the elements of narrative, and Vladimir Propp was a prominent figure in this school.  One outcome of this movement was Propp's 1928 formalism derived from the study of Russian folktales, \emph{The Morphology of the Folktale} \cite{propp1968morphology}, which is what we use to build a model to direct the course of the narrative.  In this formalism, Propp identifies recurring characters, which become roles, and motifs, which become action fragments, in Russian folklore, distilling them down to a concise syntax with which to describe stories. Propp's functional, event-driven style translates comfortably to an institution comprised of event-based norms. However, while these action fragments fit the Punch and Judy story adequately, we note that the role labels can sound rather awkward because of the apparent semantic import of the textual label.
@@ -114,7 +122,7 @@ The corresponding story functions are:
 
 Some story functions map to Punch and Judy better than others (for example, it is debatable as to whether or not the sausages can be considered a ``magical agent''), but Propp's formalism seems well suited to Punch and Judy for the most part. The advantage of using Propp for the Punch and Judy story domain is that the story function concept maps well to the idea of internal events in institutional models.
 
-\section{Combining Interval Temporal Logic and Modal Logic for Propp}
+\section{Combining Interval Temporal Logic and Modal Logic for Propp}\label{sec:propplogic}
 \mnote{(Explain how you can use story functions as modal operators)}
 \subsection{Temporal Logics}
 \mnote{Explain why you decided to use Interval Temporal Logic}
@@ -126,7 +134,7 @@ In most temporal logics, fixed \emph{time points} without duration are the basic
 \subsection{Propp Example}
 
 
-\section{Describing Punch and Judy with Kripke models}
+\section{Describing Punch and Judy with Kripke models}\label{sec:kripke}
 \mnote{(Build up an example using the sausages scene from Punch and Judy)}
 
 \section{The sausages scene in LoTREC}
