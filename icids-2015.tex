@@ -178,10 +178,17 @@ The operators defined by Halpern and Shoham are (a bar over an operator denotes 
 
 In this example, we combine Halpern and Shoham's temporal operators with the possibility ($\Diamond$) and necessity ($\Box$) operators of modal logic. We follow the convention of writing possibility operators inside angle brackets ($\langle \_ \rangle$) and necessity operators within square brackets ($[ \_ ]$).
 
-\begin{align}
-  S^1 &\implies {initialSituation()} \land [meets] S^2\\
-  S^2 &\implies {interdiction()} \land [meets] S^3
-\end{align}
+\mnote{Replace Allen's operators with HS}
+\begin{alignat*}{3}
+  &S^{1} &&\implies \mathit{initialSituation()} \land [\mathit{meets}] S^{2}\\
+  &S^{2} &&\implies \mathit{interdiction()} \land [\mathit{meets}] S^{3}\\
+  &S^{3} &&\implies \{S^{3}\} \land [\mathit{meets}] S^{7}\\
+  &S^{3} &&\implies \langle \mathit{equals} \rangle S^{3a} \land \langle \mathit{equals} \rangle S^{3b}\\
+  &S^{3b} &&\implies \mathit{violation()}\\
+  &S^{3a} &&\implies [\mathit{starts}](\mathit{absentation()} \land [\mathit{during}] \{S^{3}\} \land [\mathit{meets}] S^{3a^1})\\
+  &S^{3a^1} &&\implies \mathit{violation()} \land [\mathit{during}] \{S^{3}\} \land [\mathit{meets}] S^{3a^2}\\
+  &S^{3a^2} &&\implies \mathit{return()} \& [\mathit{finishes}] \{S^{3}\}
+\end{alignat*}
 
 
 \section{Describing Punch and Judy with Kripke models}\label{sec:kripke}
