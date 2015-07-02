@@ -99,7 +99,7 @@ Each of these functions can vary in subtle ways. For example, the \emph{villainy
 These functions are enacted by characters following certain roles. Each role (or \emph{dramatis persona} in Propp's definition) has a \emph{sphere of action} consisting of the functions that they are able to perform at any point in the story. Propp defines seven roles each of which has distinct spheres of action: \emph{villain}, \emph{donor}, \emph{helper}, \emph{princess}, \emph{dispatcher}, \emph{hero}, and \emph{false hero}.
 In a typical story, one story function will follow another as the tale progresses in a sequential series of cause and effect. However, Propp's formalism does also allow for simultaneous story functions.
 
-\subsection{Propp example: sausages and crocodile scene}\label{sec:pjexample}
+\subsection{Propp Example: Sausages and Crocodile Scene}\label{sec:pjexample}
 To provide some context for Punch and Judy, since it is a peculiarly British phenomenon, although with Italian origins, we quote from Wikipedia:
 \begin{quote}\small
 Punch and Judy is a traditional, popular, and usually very violent puppet show featuring Mr Punch and his wife, Judy. The performance consists of a sequence of short scenes, each depicting an interaction between two characters, most typically Mr Punch and one other character (who usually falls victim to Mr. Punch's club). It is often associated with traditional British seaside culture.
@@ -123,24 +123,76 @@ The corresponding story functions are:
 Some story functions map to Punch and Judy better than others (for example, it is debatable as to whether or not the sausages can be considered a ``magical agent''), but Propp's formalism seems well suited to Punch and Judy for the most part. The advantage of using Propp for the Punch and Judy story domain is that the story function concept maps well to the idea of internal events in institutional models.
 
 \section{Combining Interval Temporal Logic and Modal Logic for Propp}\label{sec:propplogic}
-\mnote{(Explain how you can use story functions as modal operators)}
-\subsection{Temporal Logics}
-\mnote{Explain why you decided to use Interval Temporal Logic}
-In most temporal logics, fixed \emph{time points} without duration are the basic unit of time. However, this can make it difficult to reason about the \emph{duration} of events that occur over a period of time. Temporal Interval Logic tackles this problem through the use of \emph{time intervals} or \emph{periods} as the basic temporal unit.
+Narrative construction can be described using two terms: \emph{fabula} and \emph{syuzhet}. Fabula is the events of the story as they occur in chronological order, but syzhet refers to those events as they are ordered in the story's telling. Fabula describes one event following another, but syuzhet could describe events occuring out of order, branching sequences and events that occur at the same time.
+
+The challenge faced here is how to find a way of not only describing the syuzhet of one story, but of all possible stories and paths through a story in a narrative world.
 
 \subsection{Modal Logic}
-\mnote{Brief description of modal logic and why we're using it here}
+Modal logic extends classical propositional and predicate logic with modalities, which are operators that qualify a statement. For example, rather than simply stating `The crocodile eats the sausages', we could instead say ``the crocodile sometimes eats the sausages'', or ``it's possible that the crocodile eats the sausages''.
 
-\subsection{Propp Example}
+Classic modal logic deals with \emph{alethic modality}, which describes whether a statement is \emph{possible} or \emph{necessary}. This is implemented using unary operators to qualify statements. For example, $\Diamond P$ states that $P$ is possible and $\Box P$ states that $P$ is necessary.
+
+Naturally, we can use modalities beyond just possibility and necessity. In order to describe the syzhet of a story, we need to be able to make statements such as ``The crocodile eats the sausages at the beginning of the scene'', and ``Punch kills the baby while before his wife returns''. For this, we turn to \emph{temporal logic}.
+
+\subsection{Temporal Logics}
+Arthur Prior is the first to employ modal logic as a way of describing sequences of time in his 1957 work \emph{Time and Modality} \cite{prior2003time}. Here he uses just two modal operators, $P$ and $F$, representing \emph{some time in the past} and \emph{some time in the future} respectively.
+
+Hans Kamp adds two extra operators to Prior's logic, \emph{Since} and \emph{Until}, in his 1968 thesis \cite{kamp1968tense}, enabling it to describe spans of time in addition to the ordering of temporal events.
+
+As Kripke later points out to Prior, this model lacks the expressiveness needed to describe all possible sequences of events. One major shortcoming is its restriction to describing only \emph{linear} events. 
+
+Linear Temporal Logic (LTL), though still limited to the description of linear sequences of events, is an evolution of the work done by Prior and Kamp. Proposed by Amir Pnueli in 1977 \cite{pnueli1977temporal}, its original use is for the formal verification of computer programs.
+
+Computational Tree Logic (CTL) \cite{ben1983temporal} is similar to LTL, but allows for the representation of non-linear time through the allowance of branches. Through CTL it is possible to describe several alternative pathways through time, though only one may ever be actualised. Like LTL, its original purpose is for formal verification of software, and in model checkers.
+
+Both CTL and LTL are subsets of the more expressive CTL* (Computational Tree Logic) \cite{emerson1986sometimes}, which can both describe both multiple branches of temporal paths and their durations. CTL* formulae must refer to a specific Kripke structure, however (a description of Kripke structures appears in section \ref{sec:kripke-structures}).
+
+\subsubsection{Interval Temporal Logic}
+In order to model syzhet with modal logic, we employ Interval Temporal Logic (ITL), composed of the temporal intervals defined by Allen \cite{allen1983maintaining} and developed into modal operators by Halpern and Shoham \cite{halpern1991propositional}. This allows the expressiveness necessary to describe branching, parallel and nested paths through stories.
+
+In most temporal logics (such as CTL* and its subsets), fixed \emph{time points} without duration are the basic unit of time. However, this can make it difficult to reason about the \emph{duration} of events that occur over a period of time. Temporal Interval Logic tackles this problem through the use of \emph{time intervals} or \emph{periods} as the basic temporal unit.
+
+The version of ITL used here is that described by Monica et al. in their overview paper \cite{della2013interval}. Figure \ref{fig:itl} lists the temporal intervals described by Allen, along with their modal operator equivalents in \emph{Halpern-Shoham logic}.
+
+The operators defined by Halpern and Shoham are (a bar over an operator denotes its inverse):
+
+\begin{itemize}
+\item $\langle L \rangle / \langle \overline{L} \rangle$ (Later): Interval $A$ occurs at some point after interval $B$.
+\item $\langle A \rangle / \langle \overline{A} \rangle$ (After): Interval $A$ occurs immediately after interval $B$.
+\item $\langle O \rangle / \langle \overline{O} \rangle$ (Overlaps): Interval $A$ occurs both during and before or after interval $B$.
+\item $\langle E \rangle / \langle \overline{E} \rangle$ (Ends): Interval $A$ ends at exactly the same time as interval $B$.
+\item $\langle D \rangle / \langle \overline{D} \rangle$ (During): Interval $A$ both starts and ends inside the duration of interval $B$.
+\item $\langle B \rangle / \langle \overline{B} \rangle$ (Begins): Interval $A$ begins at exactly the same time as interval $B$.
+\end{itemize}
+\mnote{Actually put $A$ and $B$ into these! Improve the examples.}
+\mnote{Put a detailed explanation in here.}
+
+\mnote{Try to get higher res table or recreate it myself}
+\begin{figure}[!t]\label{fig:itl}
+  \centering
+    \centerline{\includegraphics[height=2.5in]{itl.png}}
+  \caption{Operators in the Interval Temporal Logic (taken from \cite{della2013interval})}
+\end{figure}
+
+\subsection{Propp Example with Punch and Judy}
+
+In this example, we combine Halpern and Shoham's temporal operators with the possibility ($\Diamond$) and necessity ($\Box$) operators of modal logic. We follow the convention of writing possibility operators inside angle brackets ($\langle \_ \rangle$) and necessity operators within square brackets ($[ \_ ]$).
+
+\begin{align}
+  S^1 &\implies {initialSituation()} \land [meets] S^2\\
+  S^2 &\implies {interdiction()} \land [meets] S^3
+\end{align}
 
 
 \section{Describing Punch and Judy with Kripke models}\label{sec:kripke}
 \mnote{(Build up an example using the sausages scene from Punch and Judy)}
 
-\section{The sausages scene in LoTREC}
+\subsection{Kripke Structures}\label{sec:kripke-structures}
+
+\subsection{The Sausages Scene in LoTREC}
 \mnote{(Describe LoTREC, and how the sausages scene could be described in it)}
 
-\section{Conclusions and future work}
+\section{Conclusions and Future Work}
 \mnote{(Future work would be to use this system to regulate the actions of agents)}
 
 \bibliography{icids}
