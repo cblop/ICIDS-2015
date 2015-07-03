@@ -61,13 +61,15 @@ The University of the West of England (UWE), UK\\
 \end{abstract}
 
 \section{Introduction}
+\mnote{Clarify what the message is/what's desirable. What are the shortcomings of current approaches, how do we solve them?}
 Agent-based approaches to narrative generation must strike a balance between authorial control (writing a story structure), and agent's actions (allowing characters to fill in the details of a story). One way to overcome this is to allow the author to describe the structure of a story in a way which constrains the available actions of the agents.
 
 This introduces a problem: if there are multiple paths through a narrative (chosen by user interaction), how can an author describe alternative scenarios without explicitly writing out every single branch of the story?
 
 A wide variety of approaches have been taken to address this issue. A popular and effective one is to combine the use of a \emph{drama manager} with a Multi Agent System in order to regulate the actions of intelligent agents playing the parts of characters, telling them which actions to take in order to conform to a story. One of the first implementations of this approach was the Oz project at Carnegie Mellon University \cite{bates1992virtual}, ideas from which were later developed to become Mateas and Stern's \emph{Fa{c}cade} \cite{mateas2003faccade}.
 
-Another approach is to model the narrative as an institution of social norms, describing what the character agents are \emph{permitted} and \emph{obliged} to do at certain points in the story \cite{thompson-et-al:2015}. The advantage of this approach is that it merely suggests permitted actions to the agents, which have some degree of control over the actions they finally choose to carry out. For example, in an interactive narrative, a player could push a character so far that it causes them to deviate from the normal course of the story (albeit at some cost to the character agent).
+\mnote{Goal is to support greater agency for actors}
+An approach that we have explored is to model the narrative as an institution of social norms, describing what the character agents are \emph{permitted} and \emph{obliged} to do at certain points in the story \cite{thompson-et-al:2015}. The advantage of this approach is that it merely suggests permitted actions to the agents, which have some degree of control over the actions they finally choose to carry out. For example, in an interactive narrative, a player could push a character so far that it causes them to deviate from the normal course of the story (albeit at some cost to the character agent).
 
 Other approaches to balancing authorial control with player or character agency include the use of director agents \cite{lee2011learning}, reincorporation of player actions back into the narrative \cite{tomaszewski2011use} and mediation to prevent narrative-breaking actions \cite{robertson2013modelling}.
 
@@ -77,7 +79,8 @@ In this paper we describe the use of modal logic, Interval Temporal Logic \cite{
 
 This approach is influenced by Marie-Laure Ryan's work describing possible worlds \cite{ryan1991possible} in the field of narratology. Ryan describes how, in the field of interactive narrative, the path one takes through a story is but one realisation of many possible story worlds. She asserts the link between possible worlds and modal logic, and Saul Kripke's work in particular. Taking this as inspiration, we formally develop these ideas in this paper.
 
-We begin with a description of the narrative formalism we use for our approach, Propp's Morphology of the Folktale \cite{propp1968morphology}, in section \ref{sec:propp}. The use of this formalism is demonstrated with an example from the \emph{Punch and Judy} story world in section \ref{sec:pjexample}. Section \ref{sec:propplogic} implements this example using Interval Temporal Logic and modal logic. Following this, Kripke models are then implemented using the LoTREC tableaux prover \cite{del2001lotrec} (section \ref{sec:kripke}).
+We begin with a description of the narrative formalism we use for our approach, Propp's Morphology of the Folktale \cite{propp1968morphology}, in section \ref{sec:propp}. The use of this formalism is demonstrated with an example from the \emph{Punch and Judy} story world in section \ref{sec:pjexample}. Section \ref{sec:propplogic} implements this example using Interval Temporal Logic and modal logic. Following this, Kripke models are then implemented using the LoTREC tableaux prover \cite{del2001lotrec} (section \ref{sec:kripke})./mnote{Why do you want to use ITL \& Kripke models? What does this allow us to do?}
+\mnote{Add relevance to digital storytelling. Logic allows richer capture of story structure}
 
 \section{Propp's Morphology of the Folktale}\label{sec:propp}
 To express story events in modal logic, we need some sort of formalisation for the analysis of the story~-- rather than an arbitrary selection of features~-- and so we look to narrative theory for inspiration. Instead of describing parts of the Punch and Judy story explicitly (such as `Punch is expected to hit the policeman in this scene'), it is desirable to describe scenes in a more abstract way using roles (`The villain fights the victim in this scene'). The use of more general story fragments allows us to reuse them in multiple scenes, or even in other stories.
@@ -123,16 +126,17 @@ The corresponding story functions are:
 Some story functions map to Punch and Judy better than others (for example, it is debatable as to whether or not the sausages can be considered a ``magical agent''), but Propp's formalism seems well suited to Punch and Judy for the most part. The advantage of using Propp for the Punch and Judy story domain is that the story function concept maps well to the idea of internal events in institutional models.
 
 \section{Combining Interval Temporal Logic and Modal Logic for Propp}\label{sec:propplogic}
-Narrative construction can be described using two terms: \emph{fabula} and \emph{syuzhet}. Fabula is the events of the story as they occur in chronological order, but syzhet refers to those events as they are ordered in the story's telling. Fabula describes one event following another, but syuzhet could describe events occuring out of order, branching sequences and events that occur at the same time.
+\mnote{Put in definitions as a footnote, Cyrillic if you want}
+Narrative construction can be described using two terms: \emph{fabula} and \emph{syuzhet}. Fabula is the events of the story as they occur in chronological order, but syuzhet refers to those events as they are ordered in the story's telling. Fabula describes one event following another, but syuzhet could describe events occuring out of order, branching sequences and events that occur at the same time.
 
 The challenge faced here is how to find a way of not only describing the syuzhet of one story, but of all possible stories and paths through a story in a narrative world.
 
 \subsection{Modal Logic}
 Modal logic extends classical propositional and predicate logic with modalities, which are operators that qualify a statement. For example, rather than simply stating `The crocodile eats the sausages', we could instead say ``the crocodile sometimes eats the sausages'', or ``it's possible that the crocodile eats the sausages''.
-
 Classic modal logic deals with \emph{alethic modality}, which describes whether a statement is \emph{possible} or \emph{necessary}. This is implemented using unary operators to qualify statements. For example, $\Diamond P$ states that $P$ is possible and $\Box P$ states that $P$ is necessary.
+Naturally, we can use modalities beyond just possibility and necessity. In order to describe the syuzhet of a story, we need to be able to make statements such as ``The crocodile eats the sausages at the beginning of the scene'', and ``Punch kills the baby while before his wife returns''. For this, we turn to \emph{temporal logic}.
 
-Naturally, we can use modalities beyond just possibility and necessity. In order to describe the syzhet of a story, we need to be able to make statements such as ``The crocodile eats the sausages at the beginning of the scene'', and ``Punch kills the baby while before his wife returns''. For this, we turn to \emph{temporal logic}.
+\mnote{Why use modal logic for possible worlds?}
 
 \subsection{Temporal Logics}
 Arthur Prior is the first to employ modal logic as a way of describing sequences of time in his 1957 work \emph{Time and Modality} \cite{prior2003time}. Here he uses just two modal operators, $P$ and $F$, representing \emph{some time in the past} and \emph{some time in the future} respectively.
@@ -167,7 +171,8 @@ The operators defined by Halpern and Shoham are (a bar over an operator denotes 
 \mnote{Actually put $A$ and $B$ into these! Improve the examples.}
 \mnote{Put a detailed explanation in here.}
 
-\mnote{Try to get higher res table or recreate it myself}
+\mnote{Try to get higher res table or recreate it myself.}
+
 \begin{figure}[!t]\label{fig:itl}
   \centering
     \centerline{\includegraphics[height=2.5in]{itl.png}}
@@ -176,32 +181,55 @@ The operators defined by Halpern and Shoham are (a bar over an operator denotes 
 
 \subsection{Propp Example with Punch and Judy}
 
-In this example, we combine Halpern and Shoham's temporal operators with the possibility ($\Diamond$) and necessity ($\Box$) operators of modal logic. We follow the convention of writing possibility operators inside angle brackets ($\langle \_ \rangle$) and necessity operators within square brackets ($[ \_ ]$).
+In this example, we combine Halpern and Shoham's temporal operators with the possibility ($\Diamond$) and necessity ($\Box$) operators of modal logic. We follow the convention of writing possibility operators inside angle brackets: $\langle \, \rangle$ and necessity operators within square brackets: $[ \, ]$.
 
-\begin{alignat*}{3}
-  &S^{0} \land &&\mathit{interdiction(Joey, Punch, Sausages)} \land \langle B \rangle \{S^{1}\} \land \langle E \rangle \{S^{4}\} \land \langle A \rangle \{S^{5}\}\\
-  &[\{S^{1}\}] &&\mathit{absentation(Joey)} \land \langle A \rangle \{S^{2}\}\\
-  &[\{S^{2}\}] &&\mathit{struggle(Punch, Crocodile)} \land \langle E \rangle (\{S^{3a}\} \lor \{S^{3b}\})\\
-  &[\{S^{3a}\}] &&\mathit{victory(Crocodile)} \land \langle A \rangle \{S^{3a^1}\}\\
-  &[\{S^{3a^1}\}] &&\mathit{villainy(Crocodile, Sausages)} \land \langle E \rangle \{S^{4}\}\\
-  &[\{S^{3b}\}] &&\mathit{victory(Punch)} \land \langle A \rangle \{S^{3b^1}\}\\
-  &[\{S^{3b^1}\}] &&\mathit{villainy(Punch, Sausages)} \land \langle E \rangle \{S^{4}\}\\
-  &[\{S^{4}\}] &&\mathit{violation(Punch, Sausages)}\\
-  &[\{S^{5}\}] &&\mathit{return(Joey)}
-\end{alignat*}
+This example shows the ``sausages'' scene described in section \ref{sec:pjexample}, consisting of a set of situations $S$, containing Propp story functions $P$. The interval temporal logic operators used in this example are the set $T$.
+
+\begin{align}
+    S &= \{S_0, S_1, S_2, S_{3a}, S_{3a_1}, S_4, S_{3b}, S_{3b_1}, S_4, S_5\}\\
+    P &= \{\mathtt{interdiction(A, B, C), absentation(A), struggle(A, B),}\nonumber\\
+  &\qquad\qquad\mathtt{victory(A), villainy(A, B), violation(A, B), return(A)}\}\\
+    T &= \{A, B, E\}
+\end{align}
+
+We use hybrid logic to identify nodes using the \emph{nominal} operator, shown as $\{\,\}$. 
+
+\begin{align}
+  &S_{0} \land \mathit{interdiction(Joey, Punch, Sausages)} \land\nonumber\\
+  &\qquad\qquad\qquad\qquad\qquad\langle B \rangle \{S_{1}\} \land \langle E \rangle \{S_{4}\} \land \langle A \rangle \{S_{5}\}\\
+  &[\{S_{1}\}] \mathit{absentation(Joey)} \land \langle A \rangle \{S_{2}\}\\
+  &[\{S_{2}\}] \mathit{struggle(Punch, Crocodile)} \land \langle E \rangle (\{S_{3a}\} \lor \{S_{3b}\})\\
+  &[\{S_{3a}\}] \mathit{victory(Crocodile)} \land \langle A \rangle \{S_{3a_1}\}\\
+  &[\{S_{3a_1}\}] \mathit{villainy(Crocodile, Sausages)} \land \langle E \rangle \{S_{4}\}\\
+  &[\{S_{3b}\}] \mathit{victory(Punch)} \land \langle A \rangle \{S_{3b_1}\}\\
+  &[\{S_{3b_1}\}] \mathit{villainy(Punch, Sausages)} \land \langle E \rangle \{S_{4}\}\\
+  &[\{S_{4}\}] \mathit{violation(Punch, Sausages)}\\
+  &[\{S_{5}\}] \mathit{return(Joey)}
+\end{align}
 
 
 
-\section{Describing Punch and Judy with Kripke models}\label{sec:kripke}
-\mnote{(Build up an example using the sausages scene from Punch and Judy)}
+\section{Describing Punch and Judy with Kripke Structures}\label{sec:kripke}
+We use Kripke structures \cite{kripke1963semantical} as a method of interpreting the combination of modal logic with Interval Temporal Logic. A Kripke structure is a graph, the nodes of which represent a possible world consisting of a set of assertions, and the edges of which are the accessibility relations between worlds.
 
-\subsection{Kripke Structures}\label{sec:kripke-structures}
+\subsection{LoTREC}
+LoTREC \cite{del2001lotrec} is a generic tableau prover for modal and description logics.
 
 \subsection{The Sausages Scene in LoTREC}
+
+\begin{figure}[!t]\label{fig:kripke}
+  \centering
+    \centerline{\includegraphics[height=3in]{kripke.png}}
+  \caption{One premodel from the sausages scene in LoTREC}
+\end{figure}
+
+Figure \ref{fig:kripke} shows the premodel for the case where Punch wins the fight with the crocodile. One other premodel exists in this scenario, in which the crocodile is instead the victor.
+
 \mnote{(Describe LoTREC, and how the sausages scene could be described in it)}
 
 \section{Conclusions and Future Work}
-\mnote{(Future work would be to use this system to regulate the actions of agents)}
+\mnote{(Future work would be to use this system to regulate the actions of agents, hint at using in real-world applications like training systems)}
+\jnote{This is a case study to try out this approach, with a view to applying in real-world situations}
 
 \bibliography{icids}
 
