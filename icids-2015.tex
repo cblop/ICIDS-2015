@@ -41,8 +41,7 @@
 
 % Long paper page limit: 12 pages
 
-\title{Describing Possible Narrative Worlds with Interval Temporal Logic and Kripke Models}
-
+\title{Reasoning Over Story Functions with Modal Logic}
 
 \author{Matt Thompson\inst{1,}\inst{2} \and Steve Battle\inst{2} \and Julian Padget\inst{1} }
 \institute{Department of Computer Science,\\
@@ -74,6 +73,7 @@ An approach that we have explored is to model the narrative as an institution of
 Other approaches to balancing authorial control with player or character agency include the use of director agents \cite{lee2011learning}, reincorporation of player actions back into the narrative \cite{tomaszewski2011use} and mediation to prevent narrative-breaking actions \cite{robertson2013modelling}.
 
 \mnote{Need to include all the work done with planners (Riedl, Young, etc) here}
+\mnote{Put all this later, compare our approach with what's out there already}
 
 In this paper we describe the use of modal logic, Interval Temporal Logic \cite{della2013interval}, and Kripke models \cite{kripke1963semantical} to describe the many paths which a narrative can take.
 
@@ -185,28 +185,27 @@ In this example, we combine Halpern and Shoham's temporal operators with the pos
 
 This example shows the ``sausages'' scene described in section \ref{sec:pjexample}, consisting of a set of situations $S$, containing Propp story functions $P$. The interval temporal logic operators used in this example are the set $T$.
 
+\mnote{Explain how ITL enables nesting (before, after), and how these can be reusable components}
 \begin{align}
     S &= \{S_0, S_1, S_2, S_{3a}, S_{3a_1}, S_4, S_{3b}, S_{3b_1}, S_4, S_5\}\\
     P &= \{\mathtt{interdiction(A, B, C), absentation(A), struggle(A, B),}\nonumber\\
   &\qquad\qquad\mathtt{victory(A), villainy(A, B), violation(A, B), return(A)}\}\\
-    T &= \{A, B, E\}
+  T &= \{D, \overline{D}, O, \overline{O}, A, \overline{A}, B, \overline{B}, L, \overline{L}, E, \overline{E}\}
 \end{align}
 
-We use hybrid logic to identify nodes using the \emph{nominal} operator, shown as $\{\,\}$. 
-
+We use hybrid logic to identify nodes using the \emph{nominal} operator, shown as $@$. 
 \begin{align}
   &S_{0} \land \mathit{interdiction(Joey, Punch, Sausages)} \land\nonumber\\
-  &\qquad\qquad\qquad\qquad\qquad\langle B \rangle \{S_{1}\} \land \langle E \rangle \{S_{4}\} \land \langle A \rangle \{S_{5}\}\\
-  &[\{S_{1}\}] \mathit{absentation(Joey)} \land \langle A \rangle \{S_{2}\}\\
-  &[\{S_{2}\}] \mathit{struggle(Punch, Crocodile)} \land \langle E \rangle (\{S_{3a}\} \lor \{S_{3b}\})\\
-  &[\{S_{3a}\}] \mathit{victory(Crocodile)} \land \langle A \rangle \{S_{3a_1}\}\\
-  &[\{S_{3a_1}\}] \mathit{villainy(Crocodile, Sausages)} \land \langle E \rangle \{S_{4}\}\\
-  &[\{S_{3b}\}] \mathit{victory(Punch)} \land \langle A \rangle \{S_{3b_1}\}\\
-  &[\{S_{3b_1}\}] \mathit{villainy(Punch, Sausages)} \land \langle E \rangle \{S_{4}\}\\
-  &[\{S_{4}\}] \mathit{violation(Punch, Sausages)}\\
-  &[\{S_{5}\}] \mathit{return(Joey)}
+  &\qquad\qquad\qquad\qquad\qquad\langle B \rangle @S_{1} \land \langle E \rangle @S_{4} \land \langle A \rangle @S_{5}\\
+  &[@S_{1}] \mathit{absentation(Joey)} \land \langle A \rangle @S_{2}\\
+  &[@S_{2}] \mathit{struggle(Punch, Crocodile)} \land \langle E \rangle (@S_{3a} \lor @S_{3b})\\
+  &[@S_{3a}] \mathit{victory(Crocodile)} \land \langle A \rangle @S_{3a_1}\\
+  &[@S_{3a_1}] \mathit{villainy(Crocodile, Sausages)} \land \langle E \rangle @S_{4}\\
+  &[@S_{3b}] \mathit{victory(Punch)} \land \langle A \rangle @S_{3b_1}\\
+  &[@S_{3b_1}] \mathit{villainy(Punch, Sausages)} \land \langle E \rangle @S_{4}\\
+  &[@S_{4}] \mathit{violation(Punch, Sausages)}\\
+  &[@S_{5}] \mathit{return(Joey)}
 \end{align}
-
 
 
 \section{Describing Punch and Judy with Kripke Structures}\label{sec:kripke}
@@ -219,7 +218,7 @@ LoTREC \cite{del2001lotrec} is a generic tableau prover for modal and descriptio
 
 \begin{figure}[!t]\label{fig:kripke}
   \centering
-    \centerline{\includegraphics[height=3in]{kripke.png}}
+    \centerline{\includegraphics[width=1.0\textwidth]{kripke.png}}
   \caption{One premodel from the sausages scene in LoTREC}
 \end{figure}
 
