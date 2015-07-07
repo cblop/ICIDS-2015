@@ -63,7 +63,7 @@ Dept. Computer Science and Creative Technologies, UWE, Bristol, UK\\
 
 \begin{abstract}
   Authoring a consistent interactive narrative is difficult without exhaustively specifying all possible deviations from the main path of a story.
-  We present a method of describing the fabula of a story as a Kripke structure using Interval Temporal Logic allows the syuzhet to be expressed as a traversal of the structure. This allows the model checking of each possible telling of the narrative for consistency with the story world, as well as the ability to construct re-usable story components at different levels of abstraction.
+  We present a method of describing the fabula of a story as a Kripke structure using Interval Temporal Logic, allowing the syuzhet to be expressed as a traversal of the structure. This allows the model checking of each possible telling of the narrative for consistency with the story world, as well as the ability to construct re-usable story components at different levels of abstraction.
 \end{abstract}
 
 \section{Introduction}
@@ -75,6 +75,7 @@ This introduces a problem: if there are multiple paths through a narrative (chos
 
 Narratologists such as Bal \cite{bal2009narratology} describe the construction of narrative in terms of \emph{fabula} and \emph{syuzhet}, where fabula is the sequence of events in a story as they occur in chronological order, and syuzhet is a subset of those events in the order in which they appear in the telling of the story. This means that a story can be modelled as a graph of events where the fabula is a straightforward traversal from a start node to an end node, and any syuzhet would be one of many possible ways of traversing the graph.
 This simplifies our problem somewhat: if an author only needs to describe the events of a fabula, they only need create a graph of events occurring in chronological order. The user then experiences different stories by using different traversal methods. Similarly, agents would trigger events that cause the user's story to change state in a certain order.
+
 This presents another problem, however. How can we check to make sure that the order of traversal for a syuzhet coheres to the rules of a story? For example, it could be possible that the murderer in a whodunit is revealed before the murder even takes place. Though this could be interesting in a more experimental narrative, most narratives would need to have some mechanism in place to prevent such an occurrence.
 If the narrative is a non-linear or interactive one, then this problem is compounded further. In checking to see that a story traversal creates a coherent story, all possible branches and user decisions must be taken into account. Specifying which branches are correct, and in which order, would be time consuming if done by hand and expensive if all possibilities are searched with a computer program.
 \mnote{Current approaches (planners, etc) go here}
@@ -95,7 +96,7 @@ In this paper we describe the use of modal logic, Interval Temporal Logic \cite{
 
 This approach is influenced by Marie-Laure Ryan's work describing possible worlds \cite{ryan1991possible} in the field of narratology. Ryan describes how, in the field of interactive narrative, the path one takes through a story is but one realisation of many possible story worlds. She asserts the link between possible worlds and modal logic, and Saul Kripke's work in particular. Taking this as inspiration, we formally develop these ideas in this paper.
 
-We begin with a description of the narrative formalism we use for our approach, Propp's Morphology of the Folktale \cite{propp1968morphology}, in section \ref{sec:propp}. The use of this formalism is demonstrated with an example from the \emph{Punch and Judy} story world in section \ref{sec:pjexample}. Section \ref{sec:propplogic} implements this example using Interval Temporal Logic and modal logic. Following this, Kripke models are then implemented using the LoTREC tableaux prover \cite{del2001lotrec} (section \ref{sec:kripke})./mnote{Why do you want to use ITL \& Kripke models? What does this allow us to do?}
+We begin with a description of the narrative formalism we use for our approach, Propp's Morphology of the Folktale \cite{propp1968morphology}, in section \ref{sec:propp}. The use of this formalism is demonstrated with an example from the \emph{Punch and Judy} story world in section \ref{sec:pjexample}. Section \ref{sec:propplogic} implements this example using Interval Temporal Logic and modal logic. Following this, Kripke models are then implemented using the LoTREC tableaux prover \cite{del2001lotrec} (section \ref{sec:kripke}).\mnote{Why do you want to use ITL \& Kripke models? What does this allow us to do?}
 \mnote{Add relevance to digital storytelling. Logic allows richer capture of story structure}
 
 \section{Propp's Morphology of the Folktale}\label{sec:propp}
@@ -223,7 +224,7 @@ Figure \ref{fig:situations} describes the full sausages scene from Punch and Jud
   &S_{0} \land \mathit{interdiction(Joey, Punch, Sausages)} \land\nonumber\\
   &\qquad\qquad\qquad\qquad\qquad\langle B \rangle @S_{1} \land \langle E \rangle @S_{4} \land \langle A \rangle @S_{5}\\
   &[@S_{1}] \mathit{absentation(Joey)} \land \langle A \rangle @S_{2}\\
-  &[@S_{2}] \mathit{struggle(Punch, Crocodile)} \land \langle E \rangle (@S_{3a} \lor @S_{3b})\\
+  &[@S_{2}] \mathit{struggle(Punch, Crocodile)} \land \langle E \rangle (@S_{3a} \lor @S_{3b})\label{eq:struggle}\\
   &[@S_{3a}] \mathit{victory(Crocodile)} \land \langle A \rangle @S_{3a_1}\\
   &[@S_{3a_1}] \mathit{villainy(Crocodile, Sausages)} \land \langle E \rangle @S_{4}\\
   &[@S_{3b}] \mathit{victory(Punch)} \land \langle A \rangle @S_{3b_1}\\
@@ -254,22 +255,9 @@ Building models in LoTREC consists of defining \emph{connectors}, \emph{rules} a
   \caption{One premodel from the sausages scene in LoTREC}
 \end{figure}
 
-Figure \ref{fig:kripke} shows the premodel for the case where Punch wins the fight with the crocodile. One other premodel exists in this scenario, in which the crocodile is instead the victor.
+Using the initial formulas from figure \ref{fig:situations} as input, figure \ref{fig:kripke} shows the premodel for the case where Punch wins the fight with the crocodile. One other premodel exists in this scenario, in which the crocodile is instead the victor.
 
-\begin{figure}[]
-\begin{align*}
-&(((((((((((@S0 \land (interdiction(Joey,Punch,Sausages))) \land\\
-&\qquad\qquad(\langle B \rangle @S1)) \land (\langle E \rangle @S4)) \land (\langle A \rangle @S5)) \land\\
-& ([@S1] ((absentation(Joey)) \land (\langle D \rangle @S2)) \land (\langle E \rangle @S5))) \land\\
-& ([@S2] (struggle(Punch,Crocodile)) \land (\langle E \rangle @S3a v @S3b))) \land\\
-& ([@S3a] (victory(Crocodile)) \land (\langle A \rangle @S3a1))) \land\\
-& ([@S3a1] (villainy(Crocodile,Sausages)) \land (\langle E \rangle @S4))) \land\\
-& ([@S3b] (victory(Punch)) \land (\langle A \rangle @S3b1))) \land\\
-& ([@S3b1] (villainy(Punch,Sausages)) \land (\langle E \rangle @S4))) \land\\
-& ([@S4] (violation(Punch,Sausages)))) \land ([@S5] (return(Joey)))
-\end{align*}
-\caption{Premodel construction formula for LoTREC}\label{fig:premodel}
-\end{figure}
+The example in figure \ref{fig:situations} describes the fabulas of a story with several branching points, where either Punch or the Crocodile may win the fight for the sausages. This corresponds to the disjunction in figure \ref{fig:situations}, formula \ref{eq:struggle}. This leads to the creation of two premodels: the one in which the Crocodile wins and then goes on to eat the sausages (situation $@S_{3a}$), and the one in which Punch wins (situation $@S_{3b}$).
 
 \section{Conclusions and Future Work}
 This paper demonstrates the use of modal logic for the construction of non-linear narratives. The advantages of this approach are that it enables an author to create re-usable story components at various levels of abstraction. It also allows for the model-checking of a proposed narrative of subset of a narrative to see if it fits with an author's model of a narrative world.
