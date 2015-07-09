@@ -47,7 +47,7 @@
 
 % Long paper page limit: 12 pages
 
-\title{Building Checkable Interactive Story Components with Interval Temporal Logic}
+\title{Telling Non-Linear Stories with Interval Temporal Logic}
 
 \author{Matt Thompson\inst{1} \and Steve Battle\inst{2} \and Julian Padget\inst{1} }
 \institute{Department of Computer Science,\\
@@ -63,14 +63,11 @@ Dept. Computer Science and Creative Technologies, UWE, Bristol, UK\\
 
 \begin{abstract}
   Authoring a consistent interactive narrative is difficult without exhaustively specifying all possible deviations from the main path of a story.
-  We present a method of describing the fabula of a story as a Kripke structure using Interval Temporal Logic, allowing the syuzhet to be expressed as a traversal of the structure. This allows the model checking of each possible telling of the narrative for consistency with the story world, as well as the ability to construct re-usable story components at different levels of abstraction.
+We present a method of describing the fabula of a story as a Kripke structure using Interval Temporal Logic, allowing the syuzhet to be expressed as a traversal of the structure. This allows the model checking of each possible telling of the narrative for consistency with the story world, as well as the ability to construct re-usable story components at different levels of abstraction. This is the first step towards building a fully checkable framework for building story components using modal logic.
 \end{abstract}
 
 \section{Introduction}
-\mnote{Clarify what the message is/what's desirable. What are the shortcomings of current approaches, how do we solve them?}
-
 Agent-based approaches to interactive narrative generation must strike a balance between authorial control (writing a story structure), user agency and agent's actions (allowing characters to fill in the details of a story). One way to overcome this is to allow the author to describe the structure of a story in a way which constrains the available actions of the agents and user.
-\mnote{How does this relate to Riedl's notion of author vs character goals?}
 This introduces a problem: if there are multiple paths through a narrative (chosen by user interaction), how can an author describe alternative scenarios without explicitly writing out every single branch of the story? 
 
 Narratologists such as Bal \cite{bal2009narratology} describe the construction of narrative in terms of \emph{fabula} and \emph{syuzhet}, where fabula is the sequence of events in a story as they occur in chronological order, and syuzhet is a subset of those events in the order in which they appear in the telling of the story. This means that a story can be modelled as a graph of events where the fabula is a straightforward traversal from a start node to an end node, and any syuzhet would be one of many possible ways of traversing the graph.
@@ -78,23 +75,20 @@ This simplifies our problem somewhat: if an author only needs to describe the ev
 
 This presents another problem, however. How can we check to make sure that the order of traversal for a syuzhet coheres to the rules of a story? For example, it could be possible that the murderer in a whodunit is revealed before the murder even takes place. Though this could be interesting in a more experimental narrative, most narratives would need to have some mechanism in place to prevent such an occurrence.
 If the narrative is a non-linear or interactive one, then this problem is compounded further. In checking to see that a story traversal creates a coherent story, all possible branches and user decisions must be taken into account. Specifying which branches are correct, and in which order, would be time consuming if done by hand and expensive if all possibilities are searched with a computer program.
-\mnote{Current approaches (planners, etc) go here}
 
 Riedl and Young \cite{riedl2010narrative} describe the problem as one of balancing \emph{author goals} and \emph{character goals}, introducing the technique of \emph{narrative mediation} to overcome it. This method represents the story as a partially ordered plan of (linear) events. An alternative plan is generated for any point at which the user can deviate from the original plan.
+Narrative mediation has two strategies for dealing with possible narrative-breaking user interactions: \emph{accommodation}, where small changes to the narrative plan are made in order to incorporate the user's actions, and \emph{intervention}, which allows the user to perform (or seem to perform) the action, but does not allow it to have any effect on the narrative.
+A drawback to this approach is the requirement for an initial analysis of the narrative plan to search for potentially story-breaking user actions. Every occurrence of this must be dealt with by another plan to accommodate or intervene with the action.
 
-A wide variety of other approaches have been taken to address this issue. A popular and effective one is to combine the use of a \emph{drama manager} with a Multi Agent System in order to regulate the actions of intelligent agents playing the parts of characters, telling them which actions to take in order to conform to a story. One of the first implementations of this approach was the Oz project at Carnegie Mellon University \cite{bates1992virtual}, ideas from which were later developed to become Mateas and Stern's \emph{Fa{c}cade} \cite{mateas2003faccade}.
+A wide variety of other approaches have been taken to address the same issue of balancing authorial and character control. A popular and effective one is to combine the use of a \emph{drama manager} with a Multi Agent System in order to regulate the actions of intelligent agents playing the parts of characters, telling them which actions to take in order to conform to a story. One of the first implementations of this approach was the Oz project at Carnegie Mellon University \cite{bates1992virtual}, ideas from which were later developed to become Mateas and Stern's \emph{Fa\c{c}ade} \cite{mateas2003faccade}.
+Other approaches include the use of director agents \cite{lee2011learning}, reincorporation of player actions back into the narrative \cite{tomaszewski2011use} and mediation to prevent narrative-breaking actions \cite{robertson2013modelling}.
 
-\mnote{Goal is to support greater agency for actors}
-An approach that we have explored is to model the narrative as an institution of social norms, describing what the character agents are \emph{permitted} and \emph{obliged} to do at certain points in the story \cite{thompson-et-al:2015}. The advantage of this approach is that it merely suggests permitted actions to the agents, which have some degree of control over the actions they finally choose to carry out. For example, in an interactive narrative, a player could push a character so far that it causes them to deviate from the normal course of the story (albeit at some cost to the character agent).
-
-Other approaches to balancing authorial control with player or character agency include the use of director agents \cite{lee2011learning}, reincorporation of player actions back into the narrative \cite{tomaszewski2011use} and mediation to prevent narrative-breaking actions \cite{robertson2013modelling}.
-
-\mnote{Need to include all the work done with planners (Riedl, Young, etc) here}
-\mnote{Put all this later, compare our approach with what's out there already}
+An approach that we have explored is to model the narrative as an institution of social norms, describing what the character agents are \emph{permitted} and \emph{obliged} to do at certain points in the story \cite{thompson-et-al:2015}. The advantage of this approach is that it merely suggests permitted actions to the agents, which have some degree of control over the actions they finally choose to carry out. For example, in an interactive narrative, a player could push a character so far that it causes them to deviate from the normal course of the story (albeit at some cost to the character agent). The goal of this approach is to permit greater agency for characters, while still encouraging them to perform within the constraints of a narrative.
 
 In this paper we describe the use of modal logic, Interval Temporal Logic \cite{della2013interval}, and Kripke models \cite{kripke1963semantical} to describe the many paths which a narrative can take.
 
 This approach is influenced by Marie-Laure Ryan's work describing possible worlds \cite{ryan1991possible} in the field of narratology. Ryan describes how, in the field of interactive narrative, the path one takes through a story is but one realisation of many possible story worlds. She asserts the link between possible worlds and modal logic, and Saul Kripke's work in particular. Taking this as inspiration, we formally develop these ideas in this paper.
+The advantages of using Kripke structures to describe the story world are that it enables the checking of the world for inconsistencies, as well as the ability to create re-usable story components that can be combined in many different ways.
 
 We begin with a description of the narrative formalism we use for our approach, Propp's Morphology of the Folktale \cite{propp1968morphology}, in section \ref{sec:propp}. The use of this formalism is demonstrated with an example from the \emph{Punch and Judy} story world in section \ref{sec:pjexample}. Section \ref{sec:propplogic} implements this example using Interval Temporal Logic and modal logic. Following this, Kripke models are then implemented using the LoTREC tableaux prover \cite{del2001lotrec} (section \ref{sec:kripke}).\mnote{Why do you want to use ITL \& Kripke models? What does this allow us to do?}
 \mnote{Add relevance to digital storytelling. Logic allows richer capture of story structure}
@@ -157,16 +151,12 @@ Naturally, we can use modalities beyond just possibility and necessity. In order
 
 \subsection{Temporal Logics}
 Arthur Prior is the first to employ modal logic as a way of describing sequences of time in his 1957 work \emph{Time and Modality} \cite{prior2003time}. Here he uses just two modal operators, $P$ and $F$, representing \emph{some time in the past} and \emph{some time in the future} respectively.
-
 Hans Kamp adds two extra operators to Prior's logic, \emph{Since} and \emph{Until}, in his 1968 thesis \cite{kamp1968tense}, enabling it to describe spans of time in addition to the ordering of temporal events.
-
 As Kripke later points out to Prior, this model lacks the expressiveness needed to describe all possible sequences of events. One major shortcoming is its restriction to describing only \emph{linear} events. 
 
 Linear Temporal Logic (LTL), though still limited to the description of linear sequences of events, is an evolution of the work done by Prior and Kamp. Proposed by Amir Pnueli in 1977 \cite{pnueli1977temporal}, its original use is for the formal verification of computer programs.
-
 Computational Tree Logic (CTL) \cite{ben1983temporal} is similar to LTL, but allows for the representation of non-linear time through the allowance of branches. Through CTL it is possible to describe several alternative pathways through time, though only one may ever be actualised. Like LTL, its original purpose is for formal verification of software, and in model checkers.
-
-Both CTL and LTL are subsets of the more expressive CTL* (Computational Tree Logic) \cite{emerson1986sometimes}, which can both describe both multiple branches of temporal paths and their durations. CTL* formulae must refer to a specific Kripke structure, however (a description of Kripke structures appears in section \ref{sec:kripke}).
+Both CTL and LTL are subsets of CTL* (Computational Tree Logic) \cite{emerson1986sometimes}, which can both describe both multiple branches of temporal paths and their durations. CTL* formulae must refer to a specific Kripke structure, however (a description of Kripke structures appears in section \ref{sec:kripke}).
 
 \subsubsection{Interval Temporal Logic}
 In order to model syzhet with modal logic, we employ Interval Temporal Logic (ITL), composed of the temporal intervals defined by Allen \cite{allen1983maintaining} and developed into modal operators by Halpern and Shoham \cite{halpern1991propositional}. This allows the expressiveness necessary to describe branching, parallel and nested paths through stories.
@@ -198,12 +188,6 @@ The operators defined by Halpern and Shoham are (a bar over an operator denotes 
 
 \subsection{Propp Example with Punch and Judy}
 
-\begin{figure}[!t]\label{fig:durations}
-  \centering
-    \centerline{\includegraphics[width=0.9\textwidth]{durations.png}}
-  \caption{Timings of the story functions in the sausages scene}
-\end{figure}
-
 In this example, we combine Halpern and Shoham's temporal operators with the possibility ($\Diamond$) and necessity ($\Box$) operators of modal logic. We follow the convention of writing possibility operators inside angle brackets: $\langle \, \rangle$ and necessity operators within square brackets: $[ \, ]$.
 
 This example shows the ``sausages'' scene described in section \ref{sec:pjexample}, consisting of a set of situations $S$, containing Propp story functions $P$. The interval temporal logic operators used in this example are the set $T$.
@@ -216,14 +200,19 @@ This example shows the ``sausages'' scene described in section \ref{sec:pjexampl
 \end{align}
 
 We use hybrid logic to identify nodes using the \emph{nominal} operator, shown as $@$. The nominal operator adds the capability of referring to possible worlds in formulas. In this way, each possible state of a system can be labelled and referenced from other states.
-We can combine this with the Interval Temporal Logic to make statements such as ``An absentation starts with state $@S_1$ and end with state $@S_5$.''.
+We can combine this with the Interval Temporal Logic to make statements such as ``An absentation starts with state $@S_1$ and end with state $@S_5$.'' (formula \ref{eq:absentation}).
 Figure \ref{fig:situations} describes the full sausages scene from Punch and Judy using the time intervals shown in figure \ref{fig:durations}.
 
+\begin{figure}[!t]\label{fig:durations}
+  \centering
+    \centerline{\includegraphics[width=0.9\textwidth]{durations.png}}
+  \caption{Timings of the story functions in the sausages scene}
+\end{figure}
 \begin{figure}[]
 \begin{align}
   &S_{0} \land \mathit{interdiction(Joey, Punch, Sausages)} \land\nonumber\\
-  &\qquad\qquad\qquad\qquad\qquad\langle B \rangle @S_{1} \land \langle E \rangle @S_{4} \land \langle A \rangle @S_{5}\\
-  &[@S_{1}] \mathit{absentation(Joey)} \land \langle A \rangle @S_{2}\\
+  &\qquad\qquad\qquad\qquad\qquad\langle B \rangle @S_{1} \land \langle E \rangle @S_{4} \land \langle A \rangle @S_{5}\label{eq:interdiction}\\
+  &[@S_{1}] \mathit{absentation(Joey)} \land \langle A \rangle @S_{2}\label{eq:absentation}\\
   &[@S_{2}] \mathit{struggle(Punch, Crocodile)} \land \langle E \rangle (@S_{3a} \lor @S_{3b})\label{eq:struggle}\\
   &[@S_{3a}] \mathit{victory(Crocodile)} \land \langle A \rangle @S_{3a_1}\\
   &[@S_{3a_1}] \mathit{villainy(Crocodile, Sausages)} \land \langle E \rangle @S_{4}\\
@@ -236,7 +225,7 @@ Figure \ref{fig:situations} describes the full sausages scene from Punch and Jud
 \end{figure}
 
 
-One notable feature of this approach is that it enables the building of reusable story components. For example, we have said that an interdiction must begin with an absentation and end with a violation. This pattern can be reused in different stories, or several times in the same story. Additionally, it allows for the abstraction and combination of story components in a more expressive way than Propp's original story functions.\mnote{Elaborate a bit}
+One notable feature of this approach is that it enables the building of reusable story components. For example, we have said that an interdiction must begin with an absentation and end with a violation (formula \ref{eq:interdiction}). This pattern can be reused in different stories, or several times in the same story. Additionally, it allows for the abstraction and combination of story components in a more expressive way than Propp's original story functions.\mnote{Elaborate a bit}
 
 \section{Describing Punch and Judy with Kripke Structures}\label{sec:kripke}
 We use Kripke structures \cite{kripke1963semantical} as a method of interpreting the combination of modal logic with Interval Temporal Logic. A Kripke structure is a graph, the nodes of which represent a possible world consisting of a set of assertions, and the edges of which are the accessibility relations between worlds.
@@ -248,23 +237,26 @@ LoTREC uses the tableau method for model checking. This method checks whether or
 Building models in LoTREC consists of defining \emph{connectors}, \emph{rules} and \emph{strategies}. Connectors are the logical operators used in formulas, rules are the instructions LoTREC needs to expand them into new nodes and edges and strategies are ways of combining rules in order to form premodels.\mnote{What's a premodel? How's it different from a model?}
 
 \subsection{The Sausages Scene in LoTREC}
-
-\begin{figure}[!t]\label{fig:kripke}
+\begin{figure}[!t]
   \centering
     \centerline{\includegraphics[width=1.0\textwidth]{kripke.png}}
-  \caption{One premodel from the sausages scene in LoTREC}
+  \caption{One premodel from the sausages scene in LoTREC}\label{fig:lotrec}
 \end{figure}
 
-Using the initial formulas from figure \ref{fig:situations} as input, figure \ref{fig:kripke} shows the premodel for the case where Punch wins the fight with the crocodile. One other premodel exists in this scenario, in which the crocodile is instead the victor.
+Using the initial formulas from figure \ref{fig:situations} as input, figure \ref{fig:lotrec} shows the premodel for the case where Punch wins the fight with the crocodile. One other premodel exists in this scenario, in which the crocodile is instead the victor.
 
-The example in figure \ref{fig:situations} describes the fabulas of a story with several branching points, where either Punch or the Crocodile may win the fight for the sausages. This corresponds to the disjunction in figure \ref{fig:situations}, formula \ref{eq:struggle}. This leads to the creation of two premodels: the one in which the Crocodile wins and then goes on to eat the sausages (situation $@S_{3a}$), and the one in which Punch wins (situation $@S_{3b}$).
+The example in figure \ref{fig:lotrec} describes the fabulas of a story with several branching points, where either Punch or the Crocodile may win the fight for the sausages. This corresponds to the disjunction in figure \ref{fig:situations}, formula \ref{eq:struggle}. This leads to the creation of two premodels: the one in which the Crocodile wins and then goes on to eat the sausages (situation $@S_{3a}$), and the one in which Punch wins (situation $@S_{3b}$).
 
 \section{Conclusions and Future Work}
-This paper demonstrates the use of modal logic for the construction of non-linear narratives. The advantages of this approach are that it enables an author to create re-usable story components at various levels of abstraction. It also allows for the model-checking of a proposed narrative of subset of a narrative to see if it fits with an author's model of a narrative world.
+This paper demonstrates the use of interval temporal logic for the construction of non-linear narratives. The advantages of this approach are that it enables an author to create re-usable story components at various levels of abstraction. It also allows for the model-checking of a proposed narrative of subset of a narrative to see if it fits with an author's model of a narrative world.
 
 Using this method, the fabula of a story could be laid out in the original model, with the syuzhet emerging from different ways of traversing the graph. By using interval temporal logic, we ensure that the nodes of the graph can only be traversed in certain orders, thus ensuring the coherence of the narrative.
 
 This approach for describing narrative has many potential real-world uses. One obvious use would be for computer game narratives, but it could also be used to describe a repeatable training scenario, and the possible choices available to a user at any point during the simulation.
+
+This work is the first step towards creating a modal-logic based method for story description with reusable narrative motifs. In this instance we have used Propp as our narrative formalism, but this approach allows for the description of story components at different levels of abstraction. For example, the ``Hero's journey'' story type could be composed of a ``Call to adventure'' component, followed by a ``Suffering of hardship'' component, then a ``Achievement of victory'' component. These components can then be further sub-divided into smaller and smaller story components. Depending on the level of control an author desires, story components could be left entirely for character agents to act out (based on given pre and postconditions), but the amount of control the characters have over the story would depend on the level of abstraction of the story component they are acting out.
+
+From this point, we hope to explore alternative narrative formalisms outside of Propp. Though Propp works well for simple examples, modern media use story motifs that require some stretching of his story functions. We also intend to take our approach outside of the confines of the LoTREC software, into a live interactive storytelling program. In this way, we will be able to evaluate the effectiveness of our approach both in terms of story authoring and believability for the player.
 
 \bibliography{icids}
 
