@@ -54,7 +54,8 @@
 University of Bath, UK\\
 \email{\{m.r.thompson,j.a.padget\}@bath.ac.uk}
 \and
-Dept. Computer Science and Creative Technologies, UWE, Bristol, UK\\
+Dept. Computer Science and Creative Technologies,\\
+University of the West of England, Bristol, UK\\
 \email{steve.battle@uwe.ac.uk}}
 
 \maketitle
@@ -62,7 +63,7 @@ Dept. Computer Science and Creative Technologies, UWE, Bristol, UK\\
 
 
 \begin{abstract}
-  Authoring a consistent interactive narrative is difficult without exhaustively specifying all possible deviations from the main path of a story.
+Authoring a consistent interactive narrative is difficult without exhaustively specifying all possible deviations from the main path of a story. When automatically generating new story paths, it is important to be able to check these paths for consistency with the narrative world.
 We present a method of describing the fabula of a story as a Kripke structure using Interval Temporal Logic, allowing the syuzhet to be expressed as a traversal of the structure. This allows the model checking of each possible telling of the narrative for consistency with the story world, as well as the ability to construct re-usable story components at different levels of abstraction. This is the first step towards building a fully checkable framework for building story components using modal logic.
 \end{abstract}
 
@@ -168,14 +169,13 @@ The version of ITL used here is that described by Della Monica et al. in their o
 The operators defined by Halpern and Shoham are (a bar over an operator denotes its inverse):
 
 \begin{itemize}
-\item $\langle L \rangle / \langle \overline{L} \rangle$ (Later): Interval $A$ occurs at some point after interval $B$.
-\item $\langle A \rangle / \langle \overline{A} \rangle$ (After): Interval $A$ occurs immediately after interval $B$.
-\item $\langle O \rangle / \langle \overline{O} \rangle$ (Overlaps): Interval $A$ occurs both during and before or after interval $B$.
-\item $\langle E \rangle / \langle \overline{E} \rangle$ (Ends): Interval $A$ ends at exactly the same time as interval $B$.
-\item $\langle D \rangle / \langle \overline{D} \rangle$ (During): Interval $A$ both starts and ends inside the duration of interval $B$.
-\item $\langle B \rangle / \langle \overline{B} \rangle$ (Begins): Interval $A$ begins at exactly the same time as interval $B$.
+\item $\langle L \rangle / \langle \overline{L} \rangle$ (Later): The interval occurs at some point after another interval.
+\item $\langle A \rangle / \langle \overline{A} \rangle$ (After): The interval occurs immediately after another interval.
+\item $\langle O \rangle / \langle \overline{O} \rangle$ (Overlaps): The interval occurs both during and before or after another interval.
+\item $\langle E \rangle / \langle \overline{E} \rangle$ (Ends): The interval ends at exactly the same time as another interval.
+\item $\langle D \rangle / \langle \overline{D} \rangle$ (During): The interval both starts and ends inside the duration of another interval.
+\item $\langle B \rangle / \langle \overline{B} \rangle$ (Begins): The interval begins at exactly the same time as another interval.
 \end{itemize}
-\mnote{Actually put $A$ and $B$ into these! Improve the examples.}
 \mnote{Put a detailed explanation in here.}
 
 \mnote{Try to get higher res table or recreate it myself.}
@@ -228,29 +228,42 @@ Figure \ref{fig:situations} describes the full sausages scene from Punch and Jud
 \end{figure}
 
 
-One notable feature of this approach is that it enables the building of reusable story components. For example, we have said that an interdiction must begin with an absentation and ends with a violation (formula \ref{eq:interdiction}). This pattern can be reused in different stories, or several times in the same story. Additionally, it allows for the abstraction and combination of story components in a more expressive way than Propp's original story functions.\mnote{Elaborate a bit}
+One notable feature of this approach is that it enables the building of reusable story components. For example, we have said that an interdiction must begin with an absentation and ends with a violation (formula \ref{eq:interdiction}). This pattern can be reused in different stories, or several times in the same story. Additionally, it allows for the abstraction and combination of story components in a more expressive way than Propp's original story functions. This is because Propp only describes narrative events at one level of abstraction. For example, he describes stories as a series of events containing an interdiction followed by an absentation, followed by a violation. But there is no mechanism for combining these three functions into a higher-level component (which could be called ``Don't do that, or else!'', for example). Our approach makes such abstraction and recombination possible.
 
 \section{Describing Punch and Judy with Kripke Structures}\label{sec:kripke}
+\begin{figure}[!t]
+  \centering
+    \centerline{\includegraphics[width=1.0\textwidth]{kripke.png}}
+  \caption{One model from the sausages scene in LoTREC}\label{fig:lotrec}
+\end{figure}
 We use Kripke structures \cite{kripke1963semantical} as a method of interpreting the combination of modal logic with Interval Temporal Logic. A Kripke structure is a graph, the nodes of which represent a possible world consisting of a set of assertions, and the edges of which are the accessibility relations between worlds.
 
 \subsection{LoTREC}
 % Read the book
 In order to build and visualise the Kripke structures, we use LoTREC \cite{del2001lotrec}, a generic tableaux prover for modal and description logics. It allows the user to build up Kripke models using a domain specific language and display those models in the form of a graph diagram.
 LoTREC uses the tableau method for model checking. This method checks whether or not its input is satisfiable by attempting to build a model for it. If the model construction fails, then the input is unsatisfiable.
-Building models in LoTREC consists of defining \emph{connectors}, \emph{rules} and \emph{strategies}. Connectors are the logical operators used in formulas, rules are the instructions LoTREC needs to expand them into new nodes and edges and strategies are ways of combining rules in order to form premodels.\mnote{What's a premodel? How's it different from a model?}
+Building models in LoTREC consists of defining \emph{connectors}, \emph{rules} and \emph{strategies}. Connectors are the logical operators used in formulas, rules are the instructions LoTREC needs to expand them into new nodes and edges and strategies are ways of combining rules in order to form models.
+LoTREC takes an initial set of formulas as input and expands each formula into its components. These formulas are input using a simple prefix notation domain specific language consisting of operators and arguments, described in the LoTREC instruction book \emph{Kripke's Worlds} \cite{gasquet2013kripke}.
+In the expansion, if a $[\,]$ (necessary) operator is encountered, then the formulas that serve as its argument are propagated across to all subsequent nodes. In the case of a $\langle \, \rangle$ (possibility) operator, a new node (possible world) is created containing its arguments. In both cases, binary operators can be used where one argument is located inside the square or angle brackets. In these cases, the argument inside the brackets is the accessibility relation, and is used to label the edges leading to the subsequent nodes.
+In the case of a disjunction ($\lor$) operator, the current model is copied in its entirety and extended with one of the operator's arguments. The other argument is added onto the current model. This is an important way of creating alternative routes through the narrative, all of which can be checked for consistency.
 
 \subsection{The Sausages Scene in LoTREC}
-\begin{figure}[!t]
-  \centering
-    \centerline{\includegraphics[width=1.0\textwidth]{kripke.png}}
-  \caption{One premodel from the sausages scene in LoTREC}\label{fig:lotrec}
-\end{figure}
 
-Using the initial formulas from figure \ref{fig:situations} as input, figure \ref{fig:lotrec} shows the premodel for the case where Punch wins the fight with the crocodile. One other premodel exists in this scenario, in which the crocodile is instead the victor.
+Using the initial formulas from figure \ref{fig:situations} as input, figure \ref{fig:lotrec} shows the model for the case where Punch wins the fight with the crocodile. One other model exists in this scenario, in which the crocodile is instead the victor.
 
-LoTREC takes this input and expands each formula into its components. If a $[\,]$ (necessary) operator is encountered, then the formulas that serve as its argument are propagated across to all subsequent nodes. In the case of a $\langle \, \rangle$ (possibility) operator, a new node (possible world) is created containing its arguments. In both cases, binary operators can be used where one argument is located inside the square or angle brackets. In these cases, the argument inside the brackets is the accessibility relation, and is used to label the edges leading to the subsequent nodes.
+The example in figure \ref{fig:lotrec} describes the fabula of a branching story, where either Punch or the Crocodile may win the fight for the sausages. This corresponds to the disjunction in figure \ref{fig:situations}, formula \ref{eq:struggle}. This leads to the creation of two models: the one in which the Crocodile wins and then goes on to eat the sausages (situation $@S_{3a}$), and the one in which Punch wins (situation $@S_{3b}$).
 
-The example in figure \ref{fig:lotrec} describes the fabulas of a story with several branching points, where either Punch or the Crocodile may win the fight for the sausages. This corresponds to the disjunction in figure \ref{fig:situations}, formula \ref{eq:struggle}. This leads to the creation of two premodels: the one in which the Crocodile wins and then goes on to eat the sausages (situation $@S_{3a}$), and the one in which Punch wins (situation $@S_{3b}$).
+The first node contains the logical description of the story, which is then unpacked into subsequent nodes. It starts with the initial situation, $S_0$, which contains an interdiction: $\mathit{interdiction(Joey, Punch, Sausages)}$, where Joey tells Punch to look after the sausages. The other situations, $S_1$ to $S_5$ are listed using the necessity operator, with their accessibility relations being each situation's nominal operator (such as $@S_1$). This means that these situations are all created as new nodes, linked to the root node using their nominal accessibility relation, and so can be referred to later using the nominal operator. In this way, situations can refer to other situations.
+
+For example, in Propp's formalism, an interdiction must begin with the absentation of a character and end with the interdiction's violation. For this reason, the initial situation is connected to $@S_1$, ($\mathit{absentation(Joey)}$), with the $\langle B \rangle$ (begins) accessibility relation and to $@S_4$, ($\mathit{violation(Punch, Sausages)}$), with the $\langle E \rangle$ (ends) accessibility relation. As other situations are unpacked into nodes, they are linked to other situations in the same way. An example of this is shown in $S_1$, the absentation, which must end with Joey's return, $S_5$, and during which a struggle must occur ($S_2$). As the formulas inside $S_1$ are unpacked, $S_1$ is linked to the other situations with the appropriate temporal accessibility relations. This is all made possible with the hybrid logic, which allows nodes to be referred to by name and linked to.
+
+By describing situations that are linked together with temporal relations, we can build narratives and check them as we go. If a narrative is inconsistent in some way (by stating that a character is both dead and alive, for example), then the model will be unsatisfiable. This is useful for ensuring the construction of consistent narratives.
+
+Additionally, every time a story has the possibility of branching off, the model for each new branch can be checked to see if it is viable in the narrative world. This means that rather than relying on an author to write out each branch of a story, they can be generated automatically from a story description and checked for inconsistencies.
+
+As mentioned previously, the combination of Interval Temporal Logic and a narrative formalism such as Propp's allows us to create abstracted story components. For example, we have described the interdiction as being started by an absentation and ended with a violation. This pattern can be called the ``interdiction pattern'', and so can be easily reused in other narratives.
+
+The use of LoTREC has shown the utility of being able to visualise a branching narrative in its entirety. This suggests that our method enables the visual authoring of interactive narratives by non-technical creators. Rather than having to type in computer code, or logical formulas, a visual tool could be developed to create logically consistent narrative worlds.
 
 \section{Conclusions and Future Work}
 This paper demonstrates the use of interval temporal logic for the construction of non-linear narratives. The advantages of this approach are that it enables an author to create re-usable story components at various levels of abstraction. It also allows for the model-checking of a proposed narrative of subset of a narrative to see if it fits with an author's model of a narrative world.
