@@ -123,15 +123,15 @@ The Punch and Judy show has roots in the 16th-century Italian commedia dell'arte
 \url{http://en.wikipedia.org/wiki/Punch_and_Judy}, retrieved 2015-05-06.}
 \end{quote}
 
-The common elements of Punch and Judy are easily described in terms of Propp's story functions. Here we pick one scene to use as an example: the scene where Punch battles a crocodile in order to safeguard some sausages.  In this scene, Joey the clown (our narrator) asks Punch to guard the sausages. Once Joey has left the stage, a crocodile appears and eats the sausages. Punch fights with the crocodile, but it escapes. Joey then returns to find that his sausages are gone.
+The common elements of Punch and Judy are easily described in terms of Propp's story functions. Here we pick one scene to use as an example: the scene where Punch battles a Crocodile in order to safeguard some sausages.  In this scene, Joey the clown (our narrator) asks Punch to guard the sausages. Once Joey has left the stage, a Crocodile appears and eats the sausages. Punch fights with the Crocodile, but it escapes. Joey then returns to find that his sausages are gone.
 The corresponding story functions are:
 \begin{enumerate}
   \item Joey tells Punch to look after the sausages (\emph{interdiction}).
   \item Joey has some reservations, but decides to trust Punch (\emph{complicity}).
   \item Joey gives the sausages to Punch (\emph{provision or receipt of a magical agent}).
   \item Joey leaves the stage (\emph{absentation}).
-  \item A crocodile enters the stage and eats the sausages (\emph{violation}).
-  \item Punch fights with the crocodile (\emph{struggle}).
+  \item A Crocodile enters the stage and eats the sausages (\emph{violation}).
+  \item Punch fights with the Crocodile (\emph{struggle}).
   \item Joey returns to find that the sausages are gone (\emph{return}).
 \end{enumerate}
 
@@ -144,9 +144,9 @@ Narrative construction can be described using two terms: \emph{fabula} and \emph
 The challenge faced here is how to find a way of not only describing the syuzhet of one story, but of all possible stories and paths through a story in a narrative world.
 
 \subsection{Modal Logic}
-Modal logic extends classical propositional and predicate logic with modalities, which are operators that qualify a statement. For example, rather than simply stating `The crocodile eats the sausages', we could instead say ``the crocodile sometimes eats the sausages'', or ``it's possible that the crocodile eats the sausages''.
+Modal logic extends classical propositional and predicate logic with modalities, which are operators that qualify a statement. For example, rather than simply stating `The Crocodile eats the sausages', we could instead say ``the Crocodile sometimes eats the sausages'', or ``it's possible that the Crocodile eats the sausages''.
 Classic modal logic deals with \emph{alethic modality}, which describes whether a statement is \emph{possible} or \emph{necessary}. This is implemented using unary operators to qualify statements. For example, $\Diamond P$ states that $P$ is possible and $\Box P$ states that $P$ is necessary.
-Naturally, we can use modalities beyond just possibility and necessity. In order to describe the syuzhet of a story, we need to be able to make statements such as ``The crocodile eats the sausages at the beginning of the scene'', and ``Punch kills the baby while before his wife returns''. For this, we turn to \emph{temporal logic}.
+Naturally, we can use modalities beyond just possibility and necessity. In order to describe the syuzhet of a story, we need to be able to make statements such as ``The Crocodile eats the sausages at the beginning of the scene'', and ``Punch kills the baby while before his wife returns''. For this, we turn to \emph{temporal logic}.
 
 \mnote{Why use modal logic for possible worlds?}
 
@@ -234,9 +234,10 @@ One notable feature of this approach is that it enables the building of reusable
 \section{Describing Punch and Judy with Kripke Structures}\label{sec:kripke}
 \begin{figure}[!t]
   \centering
-    \centerline{\includegraphics[width=1.0\textwidth]{kripke.png}}
+    \centerline{\includegraphics[width=0.9\textwidth]{crocmodel.pdf}}
   \caption{One model from the sausages scene in LoTREC}\label{fig:lotrec}
 \end{figure}
+
 We use Kripke structures \cite{kripke1963semantical} as a method of interpreting the combination of modal logic with Interval Temporal Logic. A Kripke structure is a graph, the nodes of which represent a possible world consisting of a set of assertions, and the edges of which are the accessibility relations between worlds.
 
 \subsection{LoTREC}
@@ -249,10 +250,11 @@ In the expansion, if a $[\,]$ (necessary) operator is encountered, then the form
 In the case of a disjunction ($\lor$) operator, the current model is copied in its entirety and extended with one of the operator's arguments. The other argument is added onto the current model. This is an important way of creating alternative routes through the narrative, all of which can be checked for consistency.
 
 \subsection{The Sausages Scene in LoTREC}
-
-Using the initial formulas from figure \ref{fig:situations} as input, figure \ref{fig:lotrec} shows the model for the case where Punch wins the fight with the crocodile. One other model exists in this scenario, in which the crocodile is instead the victor.
+The narrative is captured as a system of interval temporal logic assertions over story functions. The  assertions are interpreted using a tableaux reasoner by unpacking them to form a Kripke structure.
+Using the initial formulas from figure \ref{fig:situations} as input, figure \ref{fig:lotrec} shows the model for the case where Punch wins the fight with the Crocodile. One other model exists in this scenario, in which the Crocodile is instead the victor.
 
 The example in figure \ref{fig:lotrec} describes the fabula of a branching story, where either Punch or the Crocodile may win the fight for the sausages. This corresponds to the disjunction in figure \ref{fig:situations}, formula \ref{eq:struggle}. This leads to the creation of two models: the one in which the Crocodile wins and then goes on to eat the sausages (situation $@S_{3a}$), and the one in which Punch wins (situation $@S_{3b}$).
+Using a breadth first strategy like LoTREC we would build all models simultaneously. This enables them to be checked for internal consistency, eliminating potentially impossible temporal arrangements. For example, no interval may come after or later than itself.
 
 The first node contains the logical description of the story, which is then unpacked into subsequent nodes. It starts with the initial situation, $S_0$, which contains an interdiction: $\mathit{interdiction(Joey, Punch, Sausages)}$, where Joey tells Punch to look after the sausages. The other situations, $S_1$ to $S_5$ are listed using the necessity operator, with their accessibility relations being each situation's nominal operator (such as $@S_1$). This means that these situations are all created as new nodes, linked to the root node using their nominal accessibility relation, and so can be referred to later using the nominal operator. In this way, situations can refer to other situations.
 
