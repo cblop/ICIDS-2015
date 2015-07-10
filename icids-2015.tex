@@ -164,7 +164,7 @@ In order to model fabula with modal logic, we employ Interval Temporal Logic (IT
 
 In most temporal logics (such as CTL* and its subsets), fixed \emph{time points} without duration are the basic unit of time. However, this can make it difficult to reason about the \emph{duration} of events that occur over a period of time. Temporal Interval Logic tackles this problem through the use of \emph{time intervals} or \emph{periods} as the basic temporal unit.
 
-The version of ITL used here is that described by Della Monica et al. in their overview paper \cite{della2013interval}. Figure \ref{fig:itl} lists the temporal intervals described by Allen, along with their modal operator equivalents in \emph{Halpern-Shoham logic}.
+The version of ITL used here is that described by Della Monica et al. in their overview paper \cite{della2013interval}. Table \ref{tab:itl} lists the temporal intervals described by Allen, along with their modal operator equivalents in \emph{Halpern-Shoham logic}.
 
 The operators defined by Halpern and Shoham are (a bar over an operator denotes its inverse):
 
@@ -176,22 +176,32 @@ The operators defined by Halpern and Shoham are (a bar over an operator denotes 
 \item $\langle D \rangle / \langle \overline{D} \rangle$ (During): The interval both starts and ends inside the duration of another interval.
 \item $\langle B \rangle / \langle \overline{B} \rangle$ (Begins): The interval begins at exactly the same time as another interval.
 \end{itemize}
-\mnote{Put a detailed explanation in here.}
-
-\mnote{Try to get higher res table or recreate it myself.}
-
-\begin{figure}[!t]\label{fig:itl}
+\begin{table}[]
   \centering
-    \centerline{\includegraphics[height=2.5in]{itl.png}}
-  \caption{Operators in the Interval Temporal Logic (taken from \cite{della2013interval})}
-\end{figure}
-
+  \caption{Operators in the Interval Temporal Logic (adapted from \cite{della2013interval})}
+  \label{tab:itl}
+  \begin{tabular}{l|l|l}
+    {\bf Interval} & {\bf Allen notation} & {\bf HS notation} \\
+    \hline& &\\
+    \multirow{7}{*}{\includegraphics[height=2.02in]{intervals.png}}&\emph{equals} \{=\} &\\
+    & &\\
+                   &\emph{before} \{\textless\} / \emph{after} \{\textgreater\} & $\langle L \rangle$ / $\langle \overline{L} \rangle$ \emph{(Later)}\\
+    & &\\
+                   &\emph{meets} \{\emph{m}\} / \emph{met-by} \{\emph{mi}\} &$\langle A \rangle$ / $\langle \overline{A} \rangle$ \emph{(After)}\\
+    & &\\
+    &\emph{overlaps} \{\emph{o}\} / \emph{overlapped-by} \{\emph{oi}\} &$\langle O \rangle$ / $\langle \overline{O} \rangle$ \emph{(Overlaps)}\\
+    & &\\
+    &\emph{finished-by} \{\emph{fi}\} / \emph{finishes} \{\emph{f}\} &$\langle E \rangle$ / $\langle \overline{E} \rangle$ \emph{(Ends)}\\
+    & &\\
+    &\emph{contains} \{\emph{di}\} / \emph{during} \{\emph{d}\} &$\langle D \rangle$ / $\langle \overline{D} \rangle$ \emph{(During)}\\
+    & &\\
+    &\emph{started-by} \{\emph{si}\} / \emph{starts} \{\emph{s}\} &$\langle B \rangle$ / $\langle \overline{B} \rangle$ \emph{(Begins)}
+  \end{tabular}
+\end{table}
 \subsection{Propp Example with Punch and Judy}
-
 In this example, we combine Halpern and Shoham's temporal operators with the possibility ($\Diamond$) and necessity ($\Box$) operators of modal logic. We follow the convention of writing possibility operators inside angle brackets: $\langle \, \rangle$ and necessity operators within square brackets: $[ \, ]$.
 
 This example shows the ``sausages'' scene described in section \ref{sec:pjexample}, consisting of a set of situations $S$, containing Propp story functions $P$. The interval temporal logic operators used in this example are the set $T$. Figure \ref{fig:operators} shows the modal operators we use. $A, B$ and $C$ in formula \ref{eq:story} are variables that represent the characters and objects that appear in the story.
-
 \begin{figure}
 \begin{align}
     S &= \{S_0, S_1, S_2, S_{3a}, S_{3a_1}, S_4, S_{3b}, S_{3b_1}, S_4, S_5\}\\
@@ -206,7 +216,6 @@ We also make use of a nominal modal operator so that it is possible to make asse
 We use hybrid logic to identify nodes using the \emph{nominal} operator, shown as $@$. The nominal operator adds the capability of referring to possible worlds in formulas. In this way, each possible state of a system can be labelled and referenced from other states. As seen in figure \ref{fig:lotrec}, each nominal node must have its own name as a relation leading back to the root node, in order to be linked to and referred from the other nodes.
 We can combine this with the Interval Temporal Logic to make statements such as ``An absentation starts with state $@S_1$ and end with state $@S_5$.'' (formula \ref{eq:absentation}).
 Figure \ref{fig:situations} describes the full sausages scene from Punch and Judy using the time intervals shown in figure \ref{fig:durations}.
-
 \begin{figure}[!t]
   \centering
     \centerline{\includegraphics[width=0.9\textwidth]{durations.png}}
@@ -227,7 +236,6 @@ Figure \ref{fig:situations} describes the full sausages scene from Punch and Jud
 \end{align}
 \caption{Sausages scene with nominals and Interval Temporal Logic}\label{fig:situations}
 \end{figure}
-
 
 One notable feature of this approach is that it enables the building of reusable story components. For example, we have said that an interdiction must begin with an absentation and ends with a violation (formula \ref{eq:interdiction}). This pattern can be reused in different stories, or several times in the same story. Additionally, it allows for the abstraction and combination of story components in a more expressive way than Propp's original story functions. This is because Propp only describes narrative events at one level of abstraction. For example, he describes stories as a series of events containing an interdiction followed by an absentation, followed by a violation. But there is no mechanism for combining these three functions into a higher-level component (which could be called ``Don't do that, or else!'', for example). Our approach makes such abstraction and recombination possible.
 
