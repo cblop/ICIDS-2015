@@ -159,11 +159,11 @@ Computational Tree Logic (CTL) \cite{ben1983temporal} is similar to LTL, but all
 Both CTL and LTL are subsets of CTL* (Computational Tree Logic) \cite{emerson1986sometimes}, which can both describe both multiple branches of temporal paths and their durations. CTL* formulae must refer to a specific Kripke structure, however (a description of Kripke structures appears in section \ref{sec:kripke}).
 
 \subsubsection{Interval Temporal Logic}
-In order to model syzhet with modal logic, we employ Interval Temporal Logic (ITL), composed of the temporal intervals defined by Allen \cite{allen1983maintaining} and developed into modal operators by Halpern and Shoham \cite{halpern1991propositional}. This allows the expressiveness necessary to describe branching, parallel and nested paths through stories.
+In order to model fabula with modal logic, we employ Interval Temporal Logic (ITL), composed of the temporal intervals defined by Allen \cite{allen1983maintaining} and developed into modal operators by Halpern and Shoham \cite{halpern1991propositional}. This allows the expressiveness necessary to describe branching, parallel and nested paths through stories.
 
 In most temporal logics (such as CTL* and its subsets), fixed \emph{time points} without duration are the basic unit of time. However, this can make it difficult to reason about the \emph{duration} of events that occur over a period of time. Temporal Interval Logic tackles this problem through the use of \emph{time intervals} or \emph{periods} as the basic temporal unit.
 
-The version of ITL used here is that described by Monica et al. in their overview paper \cite{della2013interval}. Figure \ref{fig:itl} lists the temporal intervals described by Allen, along with their modal operator equivalents in \emph{Halpern-Shoham logic}.
+The version of ITL used here is that described by Della Monica et al. in their overview paper \cite{della2013interval}. Figure \ref{fig:itl} lists the temporal intervals described by Allen, along with their modal operator equivalents in \emph{Halpern-Shoham logic}.
 
 The operators defined by Halpern and Shoham are (a bar over an operator denotes its inverse):
 
@@ -190,23 +190,26 @@ The operators defined by Halpern and Shoham are (a bar over an operator denotes 
 
 In this example, we combine Halpern and Shoham's temporal operators with the possibility ($\Diamond$) and necessity ($\Box$) operators of modal logic. We follow the convention of writing possibility operators inside angle brackets: $\langle \, \rangle$ and necessity operators within square brackets: $[ \, ]$.
 
-This example shows the ``sausages'' scene described in section \ref{sec:pjexample}, consisting of a set of situations $S$, containing Propp story functions $P$. The interval temporal logic operators used in this example are the set $T$.
+This example shows the ``sausages'' scene described in section \ref{sec:pjexample}, consisting of a set of situations $S$, containing Propp story functions $P$. The interval temporal logic operators used in this example are the set $T$. Figure \ref{fig:operators} shows the modal operators we use. $A, B$ and $C$ in formula \ref{eq:story} are variables that represent the characters and objects that appear in the story.
 
+\begin{figure}
 \begin{align}
     S &= \{S_0, S_1, S_2, S_{3a}, S_{3a_1}, S_4, S_{3b}, S_{3b_1}, S_4, S_5\}\\
     P &= \{\mathtt{interdiction(A, B, C), absentation(A), struggle(A, B),}\nonumber\\
-  &\qquad\qquad\mathtt{victory(A), villainy(A, B), violation(A, B), return(A)}\}\\
+  &\qquad\qquad\mathtt{victory(A), villainy(A, B), violation(A, B), return(A)}\}\label{eq:story}\\
   T &= \{D, \overline{D}, O, \overline{O}, A, \overline{A}, B, \overline{B}, L, \overline{L}, E, \overline{E}\}
 \end{align}
+\caption{Modal operators}\label{fig:operators}
+\end{figure}
 
-We use hybrid logic to identify nodes using the \emph{nominal} operator, shown as $@$. The nominal operator adds the capability of referring to possible worlds in formulas. In this way, each possible state of a system can be labelled and referenced from other states.
+We use hybrid logic to identify nodes using the \emph{nominal} operator, shown as $@$. The nominal operator adds the capability of referring to possible worlds in formulas. In this way, each possible state of a system can be labelled and referenced from other states. As seen in figure \ref{fig:lotrec}, each nominal node must have its own name as a relation leading back to the root node, in order to be linked to and referred from the other nodes.
 We can combine this with the Interval Temporal Logic to make statements such as ``An absentation starts with state $@S_1$ and end with state $@S_5$.'' (formula \ref{eq:absentation}).
 Figure \ref{fig:situations} describes the full sausages scene from Punch and Judy using the time intervals shown in figure \ref{fig:durations}.
 
-\begin{figure}[!t]\label{fig:durations}
+\begin{figure}[!t]
   \centering
     \centerline{\includegraphics[width=0.9\textwidth]{durations.png}}
-  \caption{Timings of the story functions in the sausages scene}
+  \caption{Timings of the story functions in the sausages scene}\label{fig:durations}
 \end{figure}
 \begin{figure}[]
 \begin{align}
@@ -225,7 +228,7 @@ Figure \ref{fig:situations} describes the full sausages scene from Punch and Jud
 \end{figure}
 
 
-One notable feature of this approach is that it enables the building of reusable story components. For example, we have said that an interdiction must begin with an absentation and end with a violation (formula \ref{eq:interdiction}). This pattern can be reused in different stories, or several times in the same story. Additionally, it allows for the abstraction and combination of story components in a more expressive way than Propp's original story functions.\mnote{Elaborate a bit}
+One notable feature of this approach is that it enables the building of reusable story components. For example, we have said that an interdiction must begin with an absentation and ends with a violation (formula \ref{eq:interdiction}). This pattern can be reused in different stories, or several times in the same story. Additionally, it allows for the abstraction and combination of story components in a more expressive way than Propp's original story functions.\mnote{Elaborate a bit}
 
 \section{Describing Punch and Judy with Kripke Structures}\label{sec:kripke}
 We use Kripke structures \cite{kripke1963semantical} as a method of interpreting the combination of modal logic with Interval Temporal Logic. A Kripke structure is a graph, the nodes of which represent a possible world consisting of a set of assertions, and the edges of which are the accessibility relations between worlds.
@@ -244,6 +247,8 @@ Building models in LoTREC consists of defining \emph{connectors}, \emph{rules} a
 \end{figure}
 
 Using the initial formulas from figure \ref{fig:situations} as input, figure \ref{fig:lotrec} shows the premodel for the case where Punch wins the fight with the crocodile. One other premodel exists in this scenario, in which the crocodile is instead the victor.
+
+LoTREC takes this input and expands each formula into its components. If a $[\,]$ (necessary) operator is encountered, then the formulas that serve as its argument are propagated across to all subsequent nodes. In the case of a $\langle \, \rangle$ (possibility) operator, a new node (possible world) is created containing its arguments. In both cases, binary operators can be used where one argument is located inside the square or angle brackets. In these cases, the argument inside the brackets is the accessibility relation, and is used to label the edges leading to the subsequent nodes.
 
 The example in figure \ref{fig:lotrec} describes the fabulas of a story with several branching points, where either Punch or the Crocodile may win the fight for the sausages. This corresponds to the disjunction in figure \ref{fig:situations}, formula \ref{eq:struggle}. This leads to the creation of two premodels: the one in which the Crocodile wins and then goes on to eat the sausages (situation $@S_{3a}$), and the one in which Punch wins (situation $@S_{3b}$).
 
