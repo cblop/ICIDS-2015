@@ -176,7 +176,7 @@ The operators defined by Halpern and Shoham are (a bar over an operator denotes 
 \item $\langle D \rangle / \langle \overline{D} \rangle$ (During): The interval both starts and ends inside the duration of another interval.
 \item $\langle B \rangle / \langle \overline{B} \rangle$ (Begins): The interval begins at exactly the same time as another interval.
 \end{itemize}
-\begin{table}[]
+\begin{table}[!t]
   \centering
   \caption{Operators in the Interval Temporal Logic (adapted from \cite{della2013interval})}
   \label{tab:itl}
@@ -202,7 +202,7 @@ The operators defined by Halpern and Shoham are (a bar over an operator denotes 
 In this example, we combine Halpern and Shoham's temporal operators with the possibility ($\Diamond$) and necessity ($\Box$) operators of modal logic. We follow the convention of writing possibility operators inside angle brackets: $\langle \, \rangle$ and necessity operators within square brackets: $[ \, ]$.
 
 This example shows the ``sausages'' scene described in section \ref{sec:pjexample}, consisting of a set of situations $S$, containing Propp story functions $P$. The interval temporal logic operators used in this example are the set $T$. Figure \ref{fig:operators} shows the modal operators we use. $A, B$ and $C$ in formula \ref{eq:story} are variables that represent the characters and objects that appear in the story.
-\begin{figure}
+\begin{figure}[!t]
 \begin{align}
     S &= \{S_0, S_1, S_2, S_{3a}, S_{3a_1}, S_4, S_{3b}, S_{3b_1}, S_4, S_5\}\\
     P &= \{\mathtt{interdiction(A, B, C), absentation(A), struggle(A, B),}\nonumber\\
@@ -220,8 +220,6 @@ Figure \ref{fig:situations} describes the full sausages scene from Punch and Jud
   \centering
     \centerline{\includegraphics[width=0.9\textwidth]{durations.png}}
   \caption{Timings of the story functions in the sausages scene}\label{fig:durations}
-\end{figure}
-\begin{figure}[]
 \begin{align}
   &S_{0} \land \mathit{interdiction(Joey, Punch, Sausages)} \land\nonumber\\
   &\qquad\qquad\qquad\qquad\qquad\langle B \rangle @S_{1} \land \langle E \rangle @S_{4} \land \langle A \rangle @S_{5}\label{eq:interdiction}\\
