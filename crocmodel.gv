@@ -1,0 +1,26 @@
+digraph croc_model {
+	size="4,4";
+	node [shape = box];
+  S_0 [label="@S0\ninterdiction(Joey, Punch, Sausages)\n[@S1] absentation(Joey) ^ <D>@S2 ^ <E>@S5\n[@S2] struggle(Punch, Crocodile) ^ <E>(@S3a v @S3b)\n[@S3a] victory(Crocodile) ^ <A>@S3a1\n[@S3a1] villainy(Crocodile, Sausages) ^ <E>@S4\n[@S3b] victory(Punch) ^ <A>@S3b1\n[@S3b1] villainy(Punch, Sausages)^ <E>@S4\n[@S4] violation(Punch, Sausages)\n[@S5] return(Joey)\n<B>@S1\n<E>@S4\n<A>@S5"];
+  S_1 [label="@S1\nabsentation(Joey) ^ <D>@S2 ^ <E>@S5\nabsentation(Joey) ^ <D>@S2\n<E>@S5\nabsentation(Joey)\n<D>@S2"];
+  S_2 [label="@S2\nstruggle(Punch, Crocodile) ^ <E>(@S3a v @S3b)\nstruggle(Punch, Crocodile)\n<E>@S3a v @S3b"];
+  S_3a [label="@S3a v @S3b\n@S3a\nvictory(Crocodile) ^ <A>@S3a1\nvictory(Crocodile)\n<A>@S3a1"];
+  S_3a1 [label="@S3a1\nvillainy(Crocodile, Sausages) ^ <E>@S4\nvillainy(Crocodile, Sausages)\n<E>@S4"];
+  S_4 [label="@S4\nviolation(Punch, Sausages)"];
+  S_5 [label="@S5\nreturn(Joey)"];
+	S_0 -> S_0 [ label = "@S0" ];
+	S_0 -> S_1 [ label = "@S1" ];
+	S_0 -> S_2 [ label = "@S2" ];
+	S_0 -> S_3a [ label = "@S3a" ];
+	S_0 -> S_3a1 [ label = "@S3a1" ];
+	S_0 -> S_4 [ label = "@S4" ];
+	S_0 -> S_5 [ label = "@S5" ];
+	S_0 -> S_1 [ label = "B" ];
+	S_0 -> S_4 [ label = "E" ];
+	S_0 -> S_5 [ label = "A" ];
+	S_1 -> S_2 [ label = "D" ];
+	S_1 -> S_5 [ label = "E" ];
+	S_2 -> S_3a [ label = "E" ];
+	S_3a -> S_3a1 [ label = "A" ];
+	S_3a1 -> S_4 [ label = "E" ];
+}
